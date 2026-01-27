@@ -12,10 +12,10 @@ const Index = () => {
   const [audioPlaying, setAudioPlaying] = useState(false);
 
   const categories = [
-    { id: 1, name: 'Музеи', icon: 'Building2', count: 24, gradient: 'from-purple-500 to-pink-500' },
-    { id: 2, name: 'Парки', icon: 'TreePine', count: 18, gradient: 'from-green-500 to-emerald-500' },
-    { id: 3, name: 'Рестораны', icon: 'UtensilsCrossed', count: 156, gradient: 'from-orange-500 to-red-500' },
-    { id: 4, name: 'Развлечения', icon: 'Sparkles', count: 42, gradient: 'from-blue-500 to-cyan-500' },
+    { id: 1, name: 'Музеи', icon: 'Building2', count: 24, gradient: 'from-[#A62531] to-[#8B1E28]' },
+    { id: 2, name: 'Парки', icon: 'TreePine', count: 18, gradient: 'from-[#171B1F] to-[#2C3238]' },
+    { id: 3, name: 'Рестораны', icon: 'UtensilsCrossed', count: 156, gradient: 'from-[#A62531] to-[#171B1F]' },
+    { id: 4, name: 'Развлечения', icon: 'Sparkles', count: 42, gradient: 'from-[#8B1E28] to-[#A62531]' },
   ];
 
   const objects = [
@@ -61,8 +61,8 @@ const Index = () => {
   ];
 
   const renderHome = () => (
-    <div className="min-h-screen bg-gradient-to-br from-purple-50 via-pink-50 to-blue-50">
-      <div className="sticky top-0 z-50 bg-white/80 backdrop-blur-lg border-b border-purple-100">
+    <div className="min-h-screen bg-gradient-to-br from-gray-50 via-white to-red-50">
+      <div className="sticky top-0 z-50 bg-white/95 backdrop-blur-lg border-b border-gray-200">
         <div className="max-w-7xl mx-auto px-4 py-4">
           <div className="flex items-center justify-between mb-4">
             <h1 className="text-3xl font-bold gradient-primary bg-clip-text text-transparent">
@@ -77,7 +77,7 @@ const Index = () => {
             <Icon name="Search" className="absolute left-3 top-1/2 -translate-y-1/2 text-muted-foreground" size={20} />
             <Input 
               placeholder="Поиск достопримечательностей, мест..." 
-              className="pl-10 pr-12 h-12 rounded-full border-2 border-purple-200 focus:border-purple-400"
+              className="pl-10 pr-12 h-12 rounded-full border-2 border-gray-200 focus:border-primary"
             />
             <Button 
               size="icon" 
@@ -215,7 +215,7 @@ const Index = () => {
         </Card>
       </div>
 
-      <div className="fixed bottom-0 left-0 right-0 bg-white border-t border-purple-100 safe-area-bottom">
+      <div className="fixed bottom-0 left-0 right-0 bg-white border-t border-gray-200 safe-area-bottom">
         <div className="max-w-7xl mx-auto px-4 py-3">
           <div className="flex items-center justify-around">
             <Button 
@@ -262,7 +262,7 @@ const Index = () => {
   );
 
   const renderMap = () => (
-    <div className="min-h-screen bg-gray-100">
+    <div className="min-h-screen bg-gray-50">
       <div className="sticky top-0 z-50 bg-white/90 backdrop-blur-lg border-b">
         <div className="max-w-7xl mx-auto px-4 py-3">
           <div className="flex items-center justify-between">
@@ -282,7 +282,7 @@ const Index = () => {
       </div>
 
       <div className="relative h-[calc(100vh-140px)]">
-        <div className="absolute inset-0 bg-gradient-to-br from-blue-100 via-purple-100 to-pink-100 flex items-center justify-center">
+        <div className="absolute inset-0 bg-gradient-to-br from-gray-100 via-white to-red-50 flex items-center justify-center">
           <div className="text-center space-y-4">
             <div className="w-32 h-32 mx-auto rounded-full bg-white/50 backdrop-blur-sm flex items-center justify-center animate-pulse-glow">
               <Icon name="MapPin" size={48} className="text-primary" />
