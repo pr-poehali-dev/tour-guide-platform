@@ -7,7 +7,7 @@ import { Tabs, TabsContent, TabsList, TabsTrigger } from '@/components/ui/tabs';
 import Icon from '@/components/ui/icon';
 
 const Index = () => {
-  const [activeView, setActiveView] = useState<'home' | 'map' | 'object' | 'lost'>('home');
+  const [activeView, setActiveView] = useState<'home' | 'map' | 'object' | 'lost' | 'profile'>('home');
   const [selectedObject, setSelectedObject] = useState<any>(null);
   const [audioPlaying, setAudioPlaying] = useState(false);
 
@@ -335,6 +335,7 @@ const Index = () => {
             <Button 
               variant="ghost" 
               className="flex-col h-auto py-2 gap-1"
+              onClick={() => setActiveView('profile')}
             >
               <Icon name="User" size={24} />
               <span className="text-xs">Профиль</span>
@@ -963,12 +964,338 @@ const Index = () => {
     </div>
   );
 
+  const renderProfile = () => {
+    const [notificationsEnabled, setNotificationsEnabled] = useState(true);
+    const [categoryNotifications, setCategoryNotifications] = useState({
+      museums: true,
+      parks: true,
+      restaurants: true,
+      entertainment: true,
+      lost: true
+    });
+
+    return (
+      <div className="min-h-screen bg-gray-50">
+        <div className="sticky top-0 z-50 bg-white/95 backdrop-blur-lg border-b border-gray-200">
+          <div className="max-w-7xl mx-auto px-4 py-4">
+            <div className="flex items-center justify-between">
+              <Button
+                variant="ghost"
+                size="icon"
+                onClick={() => setActiveView('home')}
+              >
+                <Icon name="ArrowLeft" size={24} />
+              </Button>
+              <h1 className="text-xl font-bold">Профиль</h1>
+              <div className="w-10" />
+            </div>
+          </div>
+        </div>
+
+        <div className="max-w-7xl mx-auto px-4 py-6 space-y-6">
+          <Card className="overflow-hidden">
+            <CardContent className="p-6">
+              <div className="flex items-center gap-4 mb-6">
+                <div className="w-20 h-20 rounded-full bg-gradient-to-br from-primary to-[#8B1E28] flex items-center justify-center text-white text-3xl font-bold">
+                  АИ
+                </div>
+                <div className="flex-1">
+                  <h2 className="text-xl font-bold mb-1">Алексей Иванов</h2>
+                  <p className="text-sm text-muted-foreground">alex.ivanov@example.com</p>
+                  <Badge variant="secondary" className="mt-2">
+                    <Icon name="MapPin" size={12} className="mr-1" />
+                    Санкт-Петербург
+                  </Badge>
+                </div>
+              </div>
+              <Button variant="outline" className="w-full">
+                <Icon name="Settings" size={18} className="mr-2" />
+                Редактировать профиль
+              </Button>
+            </CardContent>
+          </Card>
+
+          <Card className="overflow-hidden">
+            <CardContent className="p-0">
+              <div className="divide-y">
+                <button className="w-full px-6 py-4 flex items-center justify-between hover:bg-gray-50 transition-colors">
+                  <div className="flex items-center gap-3">
+                    <div className="w-10 h-10 rounded-lg bg-red-100 flex items-center justify-center">
+                      <Icon name="Heart" size={20} className="text-primary" />
+                    </div>
+                    <div className="text-left">
+                      <h3 className="font-semibold">Избранное</h3>
+                      <p className="text-sm text-muted-foreground">15 объектов</p>
+                    </div>
+                  </div>
+                  <Icon name="ChevronRight" size={20} className="text-muted-foreground" />
+                </button>
+
+                <button className="w-full px-6 py-4 flex items-center justify-between hover:bg-gray-50 transition-colors">
+                  <div className="flex items-center gap-3">
+                    <div className="w-10 h-10 rounded-lg bg-gray-100 flex items-center justify-center">
+                      <Icon name="History" size={20} className="text-gray-700" />
+                    </div>
+                    <div className="text-left">
+                      <h3 className="font-semibold">История</h3>
+                      <p className="text-sm text-muted-foreground">Посещённые места</p>
+                    </div>
+                  </div>
+                  <Icon name="ChevronRight" size={20} className="text-muted-foreground" />
+                </button>
+
+                <button className="w-full px-6 py-4 flex items-center justify-between hover:bg-gray-50 transition-colors">
+                  <div className="flex items-center gap-3">
+                    <div className="w-10 h-10 rounded-lg bg-blue-100 flex items-center justify-center">
+                      <Icon name="Download" size={20} className="text-blue-600" />
+                    </div>
+                    <div className="text-left">
+                      <h3 className="font-semibold">Офлайн-карты</h3>
+                      <p className="text-sm text-muted-foreground">2 города загружено</p>
+                    </div>
+                  </div>
+                  <Icon name="ChevronRight" size={20} className="text-muted-foreground" />
+                </button>
+              </div>
+            </CardContent>
+          </Card>
+
+          <Card className="overflow-hidden">
+            <CardContent className="p-6">
+              <h2 className="text-lg font-bold mb-4 flex items-center gap-2">
+                <Icon name="Bell" size={20} />
+                Уведомления
+              </h2>
+              
+              <div className="space-y-4">
+                <div className="flex items-center justify-between">
+                  <div>
+                    <h3 className="font-medium">Все уведомления</h3>
+                    <p className="text-sm text-muted-foreground">Получать push-уведомления</p>
+                  </div>
+                  <button
+                    onClick={() => setNotificationsEnabled(!notificationsEnabled)}
+                    className={`relative w-12 h-6 rounded-full transition-colors ${
+                      notificationsEnabled ? 'bg-primary' : 'bg-gray-300'
+                    }`}
+                  >
+                    <div
+                      className={`absolute top-1 w-4 h-4 bg-white rounded-full transition-transform ${
+                        notificationsEnabled ? 'translate-x-7' : 'translate-x-1'
+                      }`}
+                    />
+                  </button>
+                </div>
+
+                {notificationsEnabled && (
+                  <div className="pl-4 space-y-3 border-l-2 border-gray-200">
+                    <div className="flex items-center justify-between">
+                      <span className="text-sm">Музеи</span>
+                      <button
+                        onClick={() => setCategoryNotifications({...categoryNotifications, museums: !categoryNotifications.museums})}
+                        className={`relative w-10 h-5 rounded-full transition-colors ${
+                          categoryNotifications.museums ? 'bg-primary' : 'bg-gray-300'
+                        }`}
+                      >
+                        <div
+                          className={`absolute top-0.5 w-4 h-4 bg-white rounded-full transition-transform ${
+                            categoryNotifications.museums ? 'translate-x-5' : 'translate-x-0.5'
+                          }`}
+                        />
+                      </button>
+                    </div>
+
+                    <div className="flex items-center justify-between">
+                      <span className="text-sm">Парки</span>
+                      <button
+                        onClick={() => setCategoryNotifications({...categoryNotifications, parks: !categoryNotifications.parks})}
+                        className={`relative w-10 h-5 rounded-full transition-colors ${
+                          categoryNotifications.parks ? 'bg-primary' : 'bg-gray-300'
+                        }`}
+                      >
+                        <div
+                          className={`absolute top-0.5 w-4 h-4 bg-white rounded-full transition-transform ${
+                            categoryNotifications.parks ? 'translate-x-5' : 'translate-x-0.5'
+                          }`}
+                        />
+                      </button>
+                    </div>
+
+                    <div className="flex items-center justify-between">
+                      <span className="text-sm">Рестораны</span>
+                      <button
+                        onClick={() => setCategoryNotifications({...categoryNotifications, restaurants: !categoryNotifications.restaurants})}
+                        className={`relative w-10 h-5 rounded-full transition-colors ${
+                          categoryNotifications.restaurants ? 'bg-primary' : 'bg-gray-300'
+                        }`}
+                      >
+                        <div
+                          className={`absolute top-0.5 w-4 h-4 bg-white rounded-full transition-transform ${
+                            categoryNotifications.restaurants ? 'translate-x-5' : 'translate-x-0.5'
+                          }`}
+                        />
+                      </button>
+                    </div>
+
+                    <div className="flex items-center justify-between">
+                      <span className="text-sm">Развлечения</span>
+                      <button
+                        onClick={() => setCategoryNotifications({...categoryNotifications, entertainment: !categoryNotifications.entertainment})}
+                        className={`relative w-10 h-5 rounded-full transition-colors ${
+                          categoryNotifications.entertainment ? 'bg-primary' : 'bg-gray-300'
+                        }`}
+                      >
+                        <div
+                          className={`absolute top-0.5 w-4 h-4 bg-white rounded-full transition-transform ${
+                            categoryNotifications.entertainment ? 'translate-x-5' : 'translate-x-0.5'
+                          }`}
+                        />
+                      </button>
+                    </div>
+
+                    <div className="flex items-center justify-between">
+                      <span className="text-sm">Потеряшки</span>
+                      <button
+                        onClick={() => setCategoryNotifications({...categoryNotifications, lost: !categoryNotifications.lost})}
+                        className={`relative w-10 h-5 rounded-full transition-colors ${
+                          categoryNotifications.lost ? 'bg-primary' : 'bg-gray-300'
+                        }`}
+                      >
+                        <div
+                          className={`absolute top-0.5 w-4 h-4 bg-white rounded-full transition-transform ${
+                            categoryNotifications.lost ? 'translate-x-5' : 'translate-x-0.5'
+                          }`}
+                        />
+                      </button>
+                    </div>
+                  </div>
+                )}
+              </div>
+            </CardContent>
+          </Card>
+
+          <Card className="overflow-hidden">
+            <CardContent className="p-0">
+              <div className="divide-y">
+                <button className="w-full px-6 py-4 flex items-center justify-between hover:bg-gray-50 transition-colors">
+                  <div className="flex items-center gap-3">
+                    <Icon name="Shield" size={20} className="text-gray-700" />
+                    <div className="text-left">
+                      <h3 className="font-semibold">Приватность и безопасность</h3>
+                      <p className="text-sm text-muted-foreground">Управление данными</p>
+                    </div>
+                  </div>
+                  <Icon name="ChevronRight" size={20} className="text-muted-foreground" />
+                </button>
+
+                <button className="w-full px-6 py-4 flex items-center justify-between hover:bg-gray-50 transition-colors">
+                  <div className="flex items-center gap-3">
+                    <Icon name="HelpCircle" size={20} className="text-gray-700" />
+                    <div className="text-left">
+                      <h3 className="font-semibold">Помощь и поддержка</h3>
+                      <p className="text-sm text-muted-foreground">FAQ, контакты</p>
+                    </div>
+                  </div>
+                  <Icon name="ChevronRight" size={20} className="text-muted-foreground" />
+                </button>
+
+                <button className="w-full px-6 py-4 flex items-center justify-between hover:bg-gray-50 transition-colors">
+                  <div className="flex items-center gap-3">
+                    <Icon name="Info" size={20} className="text-gray-700" />
+                    <div className="text-left">
+                      <h3 className="font-semibold">О приложении</h3>
+                      <p className="text-sm text-muted-foreground">Версия 1.0.0</p>
+                    </div>
+                  </div>
+                  <Icon name="ChevronRight" size={20} className="text-muted-foreground" />
+                </button>
+              </div>
+            </CardContent>
+          </Card>
+
+          <Card className="border-red-200 overflow-hidden">
+            <CardContent className="p-6">
+              <h2 className="text-lg font-bold mb-4 text-red-600 flex items-center gap-2">
+                <Icon name="AlertTriangle" size={20} />
+                Опасная зона
+              </h2>
+              
+              <div className="space-y-3">
+                <Button variant="outline" className="w-full justify-start text-orange-600 border-orange-300 hover:bg-orange-50">
+                  <Icon name="UserX" size={18} className="mr-2" />
+                  Деактивировать аккаунт
+                </Button>
+                
+                <Button variant="outline" className="w-full justify-start text-red-600 border-red-300 hover:bg-red-50">
+                  <Icon name="Trash2" size={18} className="mr-2" />
+                  Удалить аккаунт навсегда
+                </Button>
+              </div>
+            </CardContent>
+          </Card>
+
+          <Card className="overflow-hidden">
+            <CardContent className="p-6">
+              <Button 
+                variant="ghost" 
+                className="w-full justify-center text-red-600 hover:text-red-700 hover:bg-red-50"
+              >
+                <Icon name="LogOut" size={18} className="mr-2" />
+                Выйти из аккаунта
+              </Button>
+            </CardContent>
+          </Card>
+        </div>
+
+        <div className="fixed bottom-0 left-0 right-0 bg-white border-t border-gray-200 safe-area-bottom">
+          <div className="max-w-7xl mx-auto px-4 py-3">
+            <div className="flex items-center justify-around">
+              <Button 
+                variant="ghost" 
+                className="flex-col h-auto py-2 gap-1"
+                onClick={() => setActiveView('home')}
+              >
+                <Icon name="Home" size={24} />
+                <span className="text-xs">Главная</span>
+              </Button>
+              <Button 
+                variant="ghost" 
+                className="flex-col h-auto py-2 gap-1"
+                onClick={() => setActiveView('map')}
+              >
+                <Icon name="Map" size={24} />
+                <span className="text-xs">Карта</span>
+              </Button>
+              <Button 
+                variant="ghost" 
+                className="flex-col h-auto py-2 gap-1"
+                onClick={() => setActiveView('lost')}
+              >
+                <Icon name="Search" size={24} />
+                <span className="text-xs">Потеряшки</span>
+              </Button>
+              <Button 
+                variant="ghost" 
+                className="flex-col h-auto py-2 gap-1"
+                onClick={() => setActiveView('profile')}
+              >
+                <Icon name="User" size={24} className="text-primary" />
+                <span className="text-xs font-medium">Профиль</span>
+              </Button>
+            </div>
+          </div>
+        </div>
+      </div>
+    );
+  };
+
   return (
     <>
       {activeView === 'home' && renderHome()}
       {activeView === 'map' && renderMap()}
       {activeView === 'object' && renderObject()}
       {activeView === 'lost' && renderLost()}
+      {activeView === 'profile' && renderProfile()}
     </>
   );
 };
