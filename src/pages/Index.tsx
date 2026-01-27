@@ -7,9 +7,92 @@ import { Tabs, TabsContent, TabsList, TabsTrigger } from '@/components/ui/tabs';
 import Icon from '@/components/ui/icon';
 
 const Index = () => {
-  const [activeView, setActiveView] = useState<'home' | 'map' | 'object'>('home');
+  const [activeView, setActiveView] = useState<'home' | 'map' | 'object' | 'lost'>('home');
   const [selectedObject, setSelectedObject] = useState<any>(null);
   const [audioPlaying, setAudioPlaying] = useState(false);
+
+  const lostItems = [
+    {
+      id: 1,
+      type: 'lost',
+      category: 'Вещи',
+      title: 'iPhone 14 Pro в чёрном чехле',
+      description: 'Потерял телефон в районе Невского проспекта, около метро Гостиный двор. В чехле была банковская карта.',
+      location: 'Невский пр., м. Гостиный двор',
+      date: '26 янв',
+      emoji: '📱'
+    },
+    {
+      id: 2,
+      type: 'found',
+      category: 'Животные',
+      title: 'Найден рыжий кот',
+      description: 'Нашли рыжего кота около Исаакиевского собора. Очень ласковый, в ошейнике, но без бирки.',
+      location: 'Исаакиевская пл.',
+      date: '25 янв',
+      emoji: '🐱'
+    },
+    {
+      id: 3,
+      type: 'lost',
+      category: 'Вещи',
+      title: 'Кожаный кошелёк коричневый',
+      description: 'Утерян кожаный кошелёк коричневого цвета в парке 300-летия. Внутри документы на имя Иванов А.С.',
+      location: 'Парк 300-летия',
+      date: '24 янв',
+      emoji: '👛'
+    },
+    {
+      id: 4,
+      type: 'found',
+      category: 'Вещи',
+      title: 'Найдены ключи с брелоком BMW',
+      description: 'Найдены ключи от машины с брелоком BMW около ТРК "Галерея". На связке 4 ключа.',
+      location: 'ТРК "Галерея"',
+      date: '23 янв',
+      emoji: '🔑'
+    },
+    {
+      id: 5,
+      type: 'lost',
+      category: 'Животные',
+      title: 'Пропала собака породы хаски',
+      description: 'Пропала собака хаски, сине-белого окраса, кличка Буран. Очень активный, любит детей. Вознаграждение гарантировано!',
+      location: 'Московский район',
+      date: '22 янв',
+      emoji: '🐕'
+    },
+    {
+      id: 6,
+      type: 'found',
+      category: 'Люди',
+      title: 'Найден ребёнок 5-6 лет',
+      description: 'На Дворцовой площади найден ребёнок примерно 5-6 лет, мальчик в синей куртке. Находится в полиции.',
+      location: 'Дворцовая пл.',
+      date: '26 янв',
+      emoji: '👦'
+    },
+    {
+      id: 7,
+      type: 'lost',
+      category: 'Вещи',
+      title: 'Рюкзак чёрный с ноутбуком',
+      description: 'Забыл рюкзак в маршрутке №3. Внутри ноутбук MacBook Pro и документы. Очень нужен для работы!',
+      location: 'Маршрутка №3',
+      date: '25 янв',
+      emoji: '🎒'
+    },
+    {
+      id: 8,
+      type: 'found',
+      category: 'Вещи',
+      title: 'Найдены очки в футляре',
+      description: 'Нашла очки в футляре около Казанского собора. Футляр серого цвета, очки в тонкой оправе.',
+      location: 'Казанский собор',
+      date: '24 янв',
+      emoji: '👓'
+    }
+  ];
 
   const categories = [
     { id: 1, name: 'Музеи', icon: 'Building2', count: 24, gradient: 'from-[#A62531] to-[#8B1E28]' },
@@ -244,6 +327,7 @@ const Index = () => {
             <Button 
               variant="ghost" 
               className="flex-col h-auto py-2 gap-1"
+              onClick={() => setActiveView('lost')}
             >
               <Icon name="Search" size={24} />
               <span className="text-xs">Потеряшки</span>
@@ -497,11 +581,394 @@ const Index = () => {
     );
   };
 
+  const renderLost = () => (
+    <div className="min-h-screen bg-gray-50">
+      <div className="sticky top-0 z-50 bg-white/95 backdrop-blur-lg border-b border-gray-200">
+        <div className="max-w-7xl mx-auto px-4 py-4">
+          <div className="flex items-center justify-between mb-4">
+            <Button
+              variant="ghost"
+              size="icon"
+              onClick={() => setActiveView('home')}
+            >
+              <Icon name="ArrowLeft" size={24} />
+            </Button>
+            <h1 className="text-xl font-bold">Потеряшки</h1>
+            <div className="w-10" />
+          </div>
+        </div>
+      </div>
+
+      <div className="max-w-7xl mx-auto px-4 py-6 space-y-6">
+        <Card className="gradient-primary text-white overflow-hidden">
+          <CardContent className="p-6">
+            <h2 className="text-2xl font-bold mb-2">Нашли или потеряли?</h2>
+            <p className="text-white/90 mb-4">
+              Помогите вернуть потерянное или найдите своё
+            </p>
+            <div className="flex gap-3">
+              <Button 
+                variant="secondary" 
+                className="flex-1 bg-white text-primary hover:bg-white/90"
+                onClick={() => {
+                  const section = document.getElementById('lost-form');
+                  section?.scrollIntoView({ behavior: 'smooth' });
+                }}
+              >
+                <Icon name="Search" size={18} className="mr-2" />
+                Я потерял
+              </Button>
+              <Button 
+                variant="secondary" 
+                className="flex-1 bg-white text-primary hover:bg-white/90"
+                onClick={() => {
+                  const section = document.getElementById('lost-form');
+                  section?.scrollIntoView({ behavior: 'smooth' });
+                }}
+              >
+                <Icon name="CheckCircle" size={18} className="mr-2" />
+                Я нашел
+              </Button>
+            </div>
+          </CardContent>
+        </Card>
+
+        <Tabs defaultValue="all" className="w-full">
+          <TabsList className="w-full grid grid-cols-4 h-auto">
+            <TabsTrigger value="all" className="data-[state=active]:bg-primary data-[state=active]:text-white">
+              Всё
+            </TabsTrigger>
+            <TabsTrigger value="people" className="data-[state=active]:bg-primary data-[state=active]:text-white">
+              Люди
+            </TabsTrigger>
+            <TabsTrigger value="things" className="data-[state=active]:bg-primary data-[state=active]:text-white">
+              Вещи
+            </TabsTrigger>
+            <TabsTrigger value="animals" className="data-[state=active]:bg-primary data-[state=active]:text-white">
+              Животные
+            </TabsTrigger>
+          </TabsList>
+
+          <TabsContent value="all" className="space-y-4 mt-6">
+            {lostItems.map((item) => (
+              <Card key={item.id} className="overflow-hidden hover:shadow-lg transition-shadow">
+                <CardContent className="p-4">
+                  <div className="flex gap-4">
+                    <div className="w-20 h-20 bg-gray-100 rounded-lg flex items-center justify-center text-4xl flex-shrink-0">
+                      {item.emoji}
+                    </div>
+                    <div className="flex-1 min-w-0">
+                      <div className="flex items-start justify-between gap-2 mb-2">
+                        <div>
+                          <Badge 
+                            variant={item.type === 'lost' ? 'destructive' : 'default'}
+                            className="mb-2"
+                          >
+                            {item.type === 'lost' ? 'Потерян' : 'Найден'}
+                          </Badge>
+                          <h3 className="font-bold text-lg">{item.title}</h3>
+                        </div>
+                        <Badge variant="outline" className="flex-shrink-0">
+                          {item.category}
+                        </Badge>
+                      </div>
+                      <p className="text-sm text-muted-foreground mb-3 line-clamp-2">
+                        {item.description}
+                      </p>
+                      <div className="flex items-center gap-4 text-sm text-muted-foreground">
+                        <div className="flex items-center gap-1">
+                          <Icon name="MapPin" size={14} />
+                          <span>{item.location}</span>
+                        </div>
+                        <div className="flex items-center gap-1">
+                          <Icon name="Clock" size={14} />
+                          <span>{item.date}</span>
+                        </div>
+                      </div>
+                    </div>
+                  </div>
+                  <div className="mt-4 pt-4 border-t flex gap-2">
+                    <Button className="flex-1 bg-primary hover:bg-primary/90">
+                      <Icon name="MessageCircle" size={16} className="mr-2" />
+                      Написать
+                    </Button>
+                    <Button variant="outline" size="icon">
+                      <Icon name="Share2" size={18} />
+                    </Button>
+                  </div>
+                </CardContent>
+              </Card>
+            ))}
+          </TabsContent>
+
+          <TabsContent value="people" className="space-y-4 mt-6">
+            {lostItems.filter(item => item.category === 'Люди').map((item) => (
+              <Card key={item.id} className="overflow-hidden hover:shadow-lg transition-shadow">
+                <CardContent className="p-4">
+                  <div className="flex gap-4">
+                    <div className="w-20 h-20 bg-gray-100 rounded-lg flex items-center justify-center text-4xl flex-shrink-0">
+                      {item.emoji}
+                    </div>
+                    <div className="flex-1 min-w-0">
+                      <div className="flex items-start justify-between gap-2 mb-2">
+                        <div>
+                          <Badge 
+                            variant={item.type === 'lost' ? 'destructive' : 'default'}
+                            className="mb-2"
+                          >
+                            {item.type === 'lost' ? 'Потерян' : 'Найден'}
+                          </Badge>
+                          <h3 className="font-bold text-lg">{item.title}</h3>
+                        </div>
+                      </div>
+                      <p className="text-sm text-muted-foreground mb-3">
+                        {item.description}
+                      </p>
+                      <div className="flex items-center gap-4 text-sm text-muted-foreground">
+                        <div className="flex items-center gap-1">
+                          <Icon name="MapPin" size={14} />
+                          <span>{item.location}</span>
+                        </div>
+                        <div className="flex items-center gap-1">
+                          <Icon name="Clock" size={14} />
+                          <span>{item.date}</span>
+                        </div>
+                      </div>
+                    </div>
+                  </div>
+                  <div className="mt-4 pt-4 border-t flex gap-2">
+                    <Button className="flex-1 bg-primary hover:bg-primary/90">
+                      <Icon name="MessageCircle" size={16} className="mr-2" />
+                      Написать
+                    </Button>
+                    <Button variant="outline" size="icon">
+                      <Icon name="Share2" size={18} />
+                    </Button>
+                  </div>
+                </CardContent>
+              </Card>
+            ))}
+          </TabsContent>
+
+          <TabsContent value="things" className="space-y-4 mt-6">
+            {lostItems.filter(item => item.category === 'Вещи').map((item) => (
+              <Card key={item.id} className="overflow-hidden hover:shadow-lg transition-shadow">
+                <CardContent className="p-4">
+                  <div className="flex gap-4">
+                    <div className="w-20 h-20 bg-gray-100 rounded-lg flex items-center justify-center text-4xl flex-shrink-0">
+                      {item.emoji}
+                    </div>
+                    <div className="flex-1 min-w-0">
+                      <div className="flex items-start justify-between gap-2 mb-2">
+                        <div>
+                          <Badge 
+                            variant={item.type === 'lost' ? 'destructive' : 'default'}
+                            className="mb-2"
+                          >
+                            {item.type === 'lost' ? 'Потерян' : 'Найден'}
+                          </Badge>
+                          <h3 className="font-bold text-lg">{item.title}</h3>
+                        </div>
+                      </div>
+                      <p className="text-sm text-muted-foreground mb-3">
+                        {item.description}
+                      </p>
+                      <div className="flex items-center gap-4 text-sm text-muted-foreground">
+                        <div className="flex items-center gap-1">
+                          <Icon name="MapPin" size={14} />
+                          <span>{item.location}</span>
+                        </div>
+                        <div className="flex items-center gap-1">
+                          <Icon name="Clock" size={14} />
+                          <span>{item.date}</span>
+                        </div>
+                      </div>
+                    </div>
+                  </div>
+                  <div className="mt-4 pt-4 border-t flex gap-2">
+                    <Button className="flex-1 bg-primary hover:bg-primary/90">
+                      <Icon name="MessageCircle" size={16} className="mr-2" />
+                      Написать
+                    </Button>
+                    <Button variant="outline" size="icon">
+                      <Icon name="Share2" size={18} />
+                    </Button>
+                  </div>
+                </CardContent>
+              </Card>
+            ))}
+          </TabsContent>
+
+          <TabsContent value="animals" className="space-y-4 mt-6">
+            {lostItems.filter(item => item.category === 'Животные').map((item) => (
+              <Card key={item.id} className="overflow-hidden hover:shadow-lg transition-shadow">
+                <CardContent className="p-4">
+                  <div className="flex gap-4">
+                    <div className="w-20 h-20 bg-gray-100 rounded-lg flex items-center justify-center text-4xl flex-shrink-0">
+                      {item.emoji}
+                    </div>
+                    <div className="flex-1 min-w-0">
+                      <div className="flex items-start justify-between gap-2 mb-2">
+                        <div>
+                          <Badge 
+                            variant={item.type === 'lost' ? 'destructive' : 'default'}
+                            className="mb-2"
+                          >
+                            {item.type === 'lost' ? 'Потерян' : 'Найден'}
+                          </Badge>
+                          <h3 className="font-bold text-lg">{item.title}</h3>
+                        </div>
+                      </div>
+                      <p className="text-sm text-muted-foreground mb-3">
+                        {item.description}
+                      </p>
+                      <div className="flex items-center gap-4 text-sm text-muted-foreground">
+                        <div className="flex items-center gap-1">
+                          <Icon name="MapPin" size={14} />
+                          <span>{item.location}</span>
+                        </div>
+                        <div className="flex items-center gap-1">
+                          <Icon name="Clock" size={14} />
+                          <span>{item.date}</span>
+                        </div>
+                      </div>
+                    </div>
+                  </div>
+                  <div className="mt-4 pt-4 border-t flex gap-2">
+                    <Button className="flex-1 bg-primary hover:bg-primary/90">
+                      <Icon name="MessageCircle" size={16} className="mr-2" />
+                      Написать
+                    </Button>
+                    <Button variant="outline" size="icon">
+                      <Icon name="Share2" size={18} />
+                    </Button>
+                  </div>
+                </CardContent>
+              </Card>
+            ))}
+          </TabsContent>
+        </Tabs>
+
+        <Card id="lost-form" className="overflow-hidden">
+          <CardContent className="p-6">
+            <h2 className="text-2xl font-bold mb-4">Подать объявление</h2>
+            
+            <div className="space-y-4">
+              <div>
+                <label className="block text-sm font-medium mb-2">Тип объявления</label>
+                <div className="grid grid-cols-2 gap-3">
+                  <Button variant="outline" className="h-auto py-3 flex flex-col gap-2">
+                    <Icon name="Search" size={24} className="text-primary" />
+                    <span>Я потерял</span>
+                  </Button>
+                  <Button variant="outline" className="h-auto py-3 flex flex-col gap-2">
+                    <Icon name="CheckCircle" size={24} className="text-primary" />
+                    <span>Я нашел</span>
+                  </Button>
+                </div>
+              </div>
+
+              <div>
+                <label className="block text-sm font-medium mb-2">Категория</label>
+                <div className="grid grid-cols-3 gap-3">
+                  <Button variant="outline" className="h-auto py-3 flex flex-col gap-1">
+                    <span className="text-2xl">👤</span>
+                    <span className="text-xs">Люди</span>
+                  </Button>
+                  <Button variant="outline" className="h-auto py-3 flex flex-col gap-1">
+                    <span className="text-2xl">📱</span>
+                    <span className="text-xs">Вещи</span>
+                  </Button>
+                  <Button variant="outline" className="h-auto py-3 flex flex-col gap-1">
+                    <span className="text-2xl">🐕</span>
+                    <span className="text-xs">Животные</span>
+                  </Button>
+                </div>
+              </div>
+
+              <div>
+                <label className="block text-sm font-medium mb-2">Название</label>
+                <Input placeholder="Например: Чёрный кожаный кошелёк" />
+              </div>
+
+              <div>
+                <label className="block text-sm font-medium mb-2">Описание</label>
+                <textarea
+                  className="w-full min-h-[100px] px-3 py-2 rounded-md border border-input bg-background resize-none"
+                  placeholder="Опишите подробно, где и когда потеряли/нашли..."
+                />
+              </div>
+
+              <div>
+                <label className="block text-sm font-medium mb-2">Место</label>
+                <Input placeholder="Где именно? (улица, район)" />
+              </div>
+
+              <div>
+                <label className="block text-sm font-medium mb-2">Дата</label>
+                <Input type="date" />
+              </div>
+
+              <div>
+                <label className="block text-sm font-medium mb-2">Контакты</label>
+                <Input placeholder="Телефон или Telegram" />
+              </div>
+
+              <Button className="w-full bg-primary hover:bg-primary/90 h-12">
+                <Icon name="Send" size={18} className="mr-2" />
+                Опубликовать объявление
+              </Button>
+            </div>
+          </CardContent>
+        </Card>
+      </div>
+
+      <div className="fixed bottom-0 left-0 right-0 bg-white border-t border-gray-200 safe-area-bottom">
+        <div className="max-w-7xl mx-auto px-4 py-3">
+          <div className="flex items-center justify-around">
+            <Button 
+              variant="ghost" 
+              className="flex-col h-auto py-2 gap-1"
+              onClick={() => setActiveView('home')}
+            >
+              <Icon name="Home" size={24} />
+              <span className="text-xs">Главная</span>
+            </Button>
+            <Button 
+              variant="ghost" 
+              className="flex-col h-auto py-2 gap-1"
+              onClick={() => setActiveView('map')}
+            >
+              <Icon name="Map" size={24} />
+              <span className="text-xs">Карта</span>
+            </Button>
+            <Button 
+              variant="ghost" 
+              className="flex-col h-auto py-2 gap-1"
+              onClick={() => setActiveView('lost')}
+            >
+              <Icon name="Search" size={24} className="text-primary" />
+              <span className="text-xs font-medium">Потеряшки</span>
+            </Button>
+            <Button 
+              variant="ghost" 
+              className="flex-col h-auto py-2 gap-1"
+            >
+              <Icon name="User" size={24} />
+              <span className="text-xs">Профиль</span>
+            </Button>
+          </div>
+        </div>
+      </div>
+    </div>
+  );
+
   return (
     <>
       {activeView === 'home' && renderHome()}
       {activeView === 'map' && renderMap()}
       {activeView === 'object' && renderObject()}
+      {activeView === 'lost' && renderLost()}
     </>
   );
 };
