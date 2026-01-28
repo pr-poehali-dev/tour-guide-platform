@@ -7,7 +7,7 @@ import { Tabs, TabsContent, TabsList, TabsTrigger } from '@/components/ui/tabs';
 import Icon from '@/components/ui/icon';
 
 const Index = () => {
-  const [activeView, setActiveView] = useState<'home' | 'map' | 'object' | 'lost' | 'profile' | 'search' | 'events' | 'event'>('home');
+  const [activeView, setActiveView] = useState<'home' | 'map' | 'object' | 'lost' | 'profile' | 'search' | 'events' | 'event' | 'quests' | 'news' | 'sos' | 'faq' | 'documents'>('home');
   const [selectedObject, setSelectedObject] = useState<any>(null);
   const [audioPlaying, setAudioPlaying] = useState(false);
   const [searchQuery, setSearchQuery] = useState('');
@@ -18,6 +18,7 @@ const Index = () => {
   const [eventsOffline, setEventsOffline] = useState(false);
   const [eventDateFilter, setEventDateFilter] = useState<'all' | 'today' | 'week' | 'month'>('all');
   const [eventTypeFilter, setEventTypeFilter] = useState<string[]>([]);
+  const [menuOpen, setMenuOpen] = useState(false);
 
   const lostItems = [
     {
@@ -295,11 +296,14 @@ const Index = () => {
       <div className="sticky top-0 z-50 bg-white/95 backdrop-blur-lg border-b border-gray-200">
         <div className="max-w-7xl mx-auto px-4 py-4">
           <div className="flex items-center justify-between mb-4">
-            <div>
+            <Button variant="ghost" size="icon" className="rounded-full" onClick={() => setMenuOpen(!menuOpen)}>
+              <Icon name="Menu" size={24} />
+            </Button>
+            <div className="flex-1 text-center">
               <h1 className="text-3xl font-bold gradient-primary bg-clip-text text-transparent">
                 OTAguide
               </h1>
-              <div className="flex items-center gap-1 mt-1">
+              <div className="flex items-center justify-center gap-1 mt-1">
                 <Icon name="MapPin" size={14} className="text-muted-foreground" />
                 <span className="text-sm text-muted-foreground">Санкт-Петербург</span>
                 <Button variant="ghost" size="sm" className="h-5 px-1 text-xs text-primary">
@@ -2238,8 +2242,182 @@ const Index = () => {
     );
   };
 
+  const menuItems = [
+    { id: 'quests', name: 'Квесты, квизы', icon: 'Gamepad2', emoji: '🎮' },
+    { id: 'events', name: 'Афиша', icon: 'Calendar', emoji: '🎭' },
+    { id: 'news', name: 'Новости и безопасность', icon: 'Newspaper', emoji: '📰' },
+    { id: 'sos', name: 'SOS', icon: 'AlertCircle', emoji: '🆘' },
+    { id: 'lost', name: 'Потеряшки', icon: 'Search', emoji: '🔍' },
+    { id: 'faq', name: 'Помощь/FAQ', icon: 'HelpCircle', emoji: '❓' },
+    { id: 'documents', name: 'Документы', icon: 'FileText', emoji: '📄' }
+  ];
+
+  const renderQuests = () => (
+    <div className="min-h-screen bg-white">
+      <div className="sticky top-0 z-50 bg-white border-b border-gray-200">
+        <div className="max-w-7xl mx-auto px-4 py-4">
+          <div className="flex items-center gap-3">
+            <Button variant="ghost" size="icon" onClick={() => setActiveView('home')}>
+              <Icon name="ArrowLeft" size={24} />
+            </Button>
+            <h1 className="text-2xl font-bold">Квесты, квизы</h1>
+          </div>
+        </div>
+      </div>
+      <div className="max-w-7xl mx-auto px-4 py-12 text-center">
+        <div className="text-6xl mb-4">🎮</div>
+        <h2 className="text-2xl font-bold mb-2">Раздел в разработке</h2>
+        <p className="text-muted-foreground">Скоро здесь появятся увлекательные квесты и квизы по городу</p>
+      </div>
+    </div>
+  );
+
+  const renderNews = () => (
+    <div className="min-h-screen bg-white">
+      <div className="sticky top-0 z-50 bg-white border-b border-gray-200">
+        <div className="max-w-7xl mx-auto px-4 py-4">
+          <div className="flex items-center gap-3">
+            <Button variant="ghost" size="icon" onClick={() => setActiveView('home')}>
+              <Icon name="ArrowLeft" size={24} />
+            </Button>
+            <h1 className="text-2xl font-bold">Новости и безопасность</h1>
+          </div>
+        </div>
+      </div>
+      <div className="max-w-7xl mx-auto px-4 py-12 text-center">
+        <div className="text-6xl mb-4">📰</div>
+        <h2 className="text-2xl font-bold mb-2">Раздел в разработке</h2>
+        <p className="text-muted-foreground">Здесь будут новости города и советы по безопасности</p>
+      </div>
+    </div>
+  );
+
+  const renderSOS = () => (
+    <div className="min-h-screen bg-white">
+      <div className="sticky top-0 z-50 bg-white border-b border-gray-200">
+        <div className="max-w-7xl mx-auto px-4 py-4">
+          <div className="flex items-center gap-3">
+            <Button variant="ghost" size="icon" onClick={() => setActiveView('home')}>
+              <Icon name="ArrowLeft" size={24} />
+            </Button>
+            <h1 className="text-2xl font-bold">SOS</h1>
+          </div>
+        </div>
+      </div>
+      <div className="max-w-7xl mx-auto px-4 py-12 text-center">
+        <div className="text-6xl mb-4">🆘</div>
+        <h2 className="text-2xl font-bold mb-2">Экстренная помощь</h2>
+        <p className="text-muted-foreground mb-6">Раздел в разработке</p>
+        <div className="space-y-3 max-w-md mx-auto">
+          <Button variant="outline" className="w-full h-16 text-lg">
+            <Icon name="Phone" size={24} className="mr-3" />
+            112 - Единый номер экстренных служб
+          </Button>
+          <Button variant="outline" className="w-full h-16 text-lg">
+            <Icon name="Ambulance" size={24} className="mr-3" />
+            103 - Скорая помощь
+          </Button>
+          <Button variant="outline" className="w-full h-16 text-lg">
+            <Icon name="ShieldAlert" size={24} className="mr-3" />
+            102 - Полиция
+          </Button>
+        </div>
+      </div>
+    </div>
+  );
+
+  const renderFAQ = () => (
+    <div className="min-h-screen bg-white">
+      <div className="sticky top-0 z-50 bg-white border-b border-gray-200">
+        <div className="max-w-7xl mx-auto px-4 py-4">
+          <div className="flex items-center gap-3">
+            <Button variant="ghost" size="icon" onClick={() => setActiveView('home')}>
+              <Icon name="ArrowLeft" size={24} />
+            </Button>
+            <h1 className="text-2xl font-bold">Помощь/FAQ</h1>
+          </div>
+        </div>
+      </div>
+      <div className="max-w-7xl mx-auto px-4 py-12 text-center">
+        <div className="text-6xl mb-4">❓</div>
+        <h2 className="text-2xl font-bold mb-2">Раздел в разработке</h2>
+        <p className="text-muted-foreground">Скоро здесь появятся ответы на частые вопросы</p>
+      </div>
+    </div>
+  );
+
+  const renderDocuments = () => (
+    <div className="min-h-screen bg-white">
+      <div className="sticky top-0 z-50 bg-white border-b border-gray-200">
+        <div className="max-w-7xl mx-auto px-4 py-4">
+          <div className="flex items-center gap-3">
+            <Button variant="ghost" size="icon" onClick={() => setActiveView('home')}>
+              <Icon name="ArrowLeft" size={24} />
+            </Button>
+            <h1 className="text-2xl font-bold">Документы</h1>
+          </div>
+        </div>
+      </div>
+      <div className="max-w-7xl mx-auto px-4 py-12 text-center">
+        <div className="text-6xl mb-4">📄</div>
+        <h2 className="text-2xl font-bold mb-2">Раздел в разработке</h2>
+        <p className="text-muted-foreground">Здесь будут доступны важные документы и информация</p>
+      </div>
+    </div>
+  );
+
   return (
     <>
+      {menuOpen && (
+        <div 
+          className="fixed inset-0 bg-black/50 z-[60] backdrop-blur-sm"
+          onClick={() => setMenuOpen(false)}
+        >
+          <div 
+            className="absolute top-0 left-0 w-80 h-full bg-white shadow-2xl"
+            onClick={(e) => e.stopPropagation()}
+          >
+            <div className="p-6 border-b border-gray-200">
+              <div className="flex items-center justify-between mb-2">
+                <h2 className="text-2xl font-bold gradient-primary bg-clip-text text-transparent">
+                  Меню
+                </h2>
+                <Button variant="ghost" size="icon" onClick={() => setMenuOpen(false)}>
+                  <Icon name="X" size={24} />
+                </Button>
+              </div>
+              <p className="text-sm text-muted-foreground">OTAguide Санкт-Петербург</p>
+            </div>
+
+            <div className="p-4 space-y-2">
+              {menuItems.map((item) => (
+                <button
+                  key={item.id}
+                  className="w-full flex items-center gap-4 p-4 rounded-xl hover:bg-gray-100 transition-colors text-left"
+                  onClick={() => {
+                    setActiveView(item.id as any);
+                    setMenuOpen(false);
+                  }}
+                >
+                  <div className="text-3xl">{item.emoji}</div>
+                  <div className="flex-1">
+                    <h3 className="font-semibold">{item.name}</h3>
+                  </div>
+                  <Icon name="ChevronRight" size={20} className="text-muted-foreground" />
+                </button>
+              ))}
+            </div>
+
+            <div className="absolute bottom-0 left-0 right-0 p-6 border-t border-gray-200 bg-gray-50">
+              <div className="text-xs text-muted-foreground text-center">
+                <p>OTAguide v1.0</p>
+                <p className="mt-1">© 2026 Все права защищены</p>
+              </div>
+            </div>
+          </div>
+        </div>
+      )}
+
       {activeView === 'home' && renderHome()}
       {activeView === 'map' && renderMap()}
       {activeView === 'object' && renderObject()}
@@ -2248,6 +2426,11 @@ const Index = () => {
       {activeView === 'search' && renderSearch()}
       {activeView === 'events' && renderEvents()}
       {activeView === 'event' && renderEvent()}
+      {activeView === 'quests' && renderQuests()}
+      {activeView === 'news' && renderNews()}
+      {activeView === 'sos' && renderSOS()}
+      {activeView === 'faq' && renderFAQ()}
+      {activeView === 'documents' && renderDocuments()}
     </>
   );
 };
