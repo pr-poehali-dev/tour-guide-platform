@@ -19,6 +19,19 @@ const Index = () => {
   const [eventDateFilter, setEventDateFilter] = useState<'all' | 'today' | 'week' | 'month'>('all');
   const [eventTypeFilter, setEventTypeFilter] = useState<string[]>([]);
   const [menuOpen, setMenuOpen] = useState(false);
+  const [locationModalOpen, setLocationModalOpen] = useState(false);
+  const [selectedRegion, setSelectedRegion] = useState('ДНР');
+  const [selectedCity, setSelectedCity] = useState('Донецк');
+
+  const regions = {
+    'ДНР': ['Донецк', 'Макеевка', 'Мариуполь', 'Шахтёрск', 'Снежное', 'Харцызск', 'Енакиево', 'Дебальцево', 'Мангуш', 'Новоазовск', 'Старобешево', 'Волноваха', 'Горловка', 'Амвросиевка', 'Тельманово', 'Зугрэс', 'Мелекино', 'Ялта', 'Урзуф', 'Володарское', 'Ясиноватая', 'Торез', 'Иловайск'],
+    'ЛНР': ['Луганск'],
+    'Херсонская область': ['Херсон'],
+    'Запорожская область': ['Запорожье'],
+    'Крым': ['Симферополь', 'Севастополь', 'Ялта', 'Керчь', 'Евпатория', 'Феодосия'],
+    'Ростовская область': ['Ростов-на-Дону', 'Таганрог', 'Шахты', 'Новочеркасск', 'Волгодонск'],
+    'Краснодарский край': ['Краснодар', 'Сочи', 'Новороссийск', 'Анапа', 'Геленджик']
+  };
 
   const lostItems = [
     {
@@ -305,8 +318,13 @@ const Index = () => {
               </h1>
               <div className="flex items-center justify-center gap-1 mt-1">
                 <Icon name="MapPin" size={14} className="text-muted-foreground" />
-                <span className="text-sm text-muted-foreground">Санкт-Петербург</span>
-                <Button variant="ghost" size="sm" className="h-5 px-1 text-xs text-primary">
+                <span className="text-sm text-muted-foreground">{selectedCity}</span>
+                <Button 
+                  variant="ghost" 
+                  size="sm" 
+                  className="h-5 px-1 text-xs text-primary"
+                  onClick={() => setLocationModalOpen(true)}
+                >
                   изменить
                 </Button>
               </div>
@@ -2368,6 +2386,99 @@ const Index = () => {
 
   return (
     <>
+      {locationModalOpen && (
+        <div 
+          className="fixed inset-0 bg-black/50 z-[70] backdrop-blur-sm flex items-center justify-center p-4"
+          onClick={() => setLocationModalOpen(false)}
+        >
+          <Card 
+            className="w-full max-w-md max-h-[80vh] overflow-hidden"
+            onClick={(e) => e.stopPropagation()}
+          >
+            <CardContent className="p-0">
+              <div className="p-6 border-b border-gray-200 bg-gradient-to-r from-red-50 to-white">
+                <div className="flex items-center justify-between mb-2">
+                  <h2 className="text-2xl font-bold">Выбор региона</h2>
+                  <Button variant="ghost" size="icon" onClick={() => setLocationModalOpen(false)}>
+                    <Icon name="X" size={24} />
+                  </Button>
+                </div>
+                <p className="text-sm text-muted-foreground">Выберите регион и город</p>
+              </div>
+
+              <div className="overflow-y-auto max-h-[60vh]">
+                <div className="p-6 space-y-4">
+                  <div>
+                    <label className="text-sm font-semibold text-muted-foreground mb-2 block">
+                      Регион
+                    </label>
+                    <div className="space-y-2">
+                      {Object.keys(regions).map((region) => (
+                        <button
+                          key={region}
+                          className={`w-full p-3 rounded-lg border-2 transition-all text-left ${
+                            selectedRegion === region
+                              ? 'border-primary bg-red-50'
+                              : 'border-gray-200 hover:border-gray-300'
+                          }`}
+                          onClick={() => {
+                            setSelectedRegion(region);
+                            setSelectedCity(regions[region as keyof typeof regions][0]);
+                          }}
+                        >
+                          <div className="flex items-center justify-between">
+                            <span className="font-medium">{region}</span>
+                            {selectedRegion === region && (
+                              <Icon name="Check" size={20} className="text-primary" />
+                            )}
+                          </div>
+                        </button>
+                      ))}
+                    </div>
+                  </div>
+
+                  <div>
+                    <label className="text-sm font-semibold text-muted-foreground mb-2 block">
+                      Город
+                    </label>
+                    <div className="space-y-2">
+                      {regions[selectedRegion as keyof typeof regions].map((city) => (
+                        <button
+                          key={city}
+                          className={`w-full p-3 rounded-lg border-2 transition-all text-left ${
+                            selectedCity === city
+                              ? 'border-primary bg-red-50'
+                              : 'border-gray-200 hover:border-gray-300'
+                          }`}
+                          onClick={() => setSelectedCity(city)}
+                        >
+                          <div className="flex items-center justify-between">
+                            <span className="font-medium">{city}</span>
+                            {selectedCity === city && (
+                              <Icon name="Check" size={20} className="text-primary" />
+                            )}
+                          </div>
+                        </button>
+                      ))}
+                    </div>
+                  </div>
+                </div>
+              </div>
+
+              <div className="p-6 border-t border-gray-200 bg-gray-50">
+                <Button 
+                  className="w-full gradient-primary"
+                  onClick={() => setLocationModalOpen(false)}
+                >
+                  <Icon name="MapPin" size={18} className="mr-2" />
+                  Применить
+                </Button>
+              </div>
+            </CardContent>
+          </Card>
+        </div>
+      )}
+
       {menuOpen && (
         <div 
           className="fixed inset-0 bg-black/50 z-[60] backdrop-blur-sm"
@@ -2386,7 +2497,7 @@ const Index = () => {
                   <Icon name="X" size={24} />
                 </Button>
               </div>
-              <p className="text-sm text-muted-foreground">OTAguide Санкт-Петербург</p>
+              <p className="text-sm text-muted-foreground">OTAguide {selectedCity}</p>
             </div>
 
             <div className="p-4 space-y-2">
