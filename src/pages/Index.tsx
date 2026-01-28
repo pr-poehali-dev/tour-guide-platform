@@ -316,11 +316,8 @@ const Index = () => {
     <div className="min-h-screen bg-gradient-to-br from-gray-50 via-white to-red-50 pb-24">
       <div className="sticky top-0 z-50 bg-white/95 backdrop-blur-lg border-b border-gray-200">
         <div className="max-w-7xl mx-auto px-4 py-4">
-          <div className="flex items-center justify-between mb-4">
-            <Button variant="ghost" size="icon" className="rounded-full" onClick={() => setMenuOpen(!menuOpen)}>
-              <Icon name="Menu" size={24} />
-            </Button>
-            <div className="flex-1 text-center">
+          <div className="flex items-center justify-center mb-4">
+            <div className="text-center">
               <h1 className="text-3xl font-bold gradient-primary bg-clip-text text-transparent">
                 OTAguide
               </h1>
@@ -337,9 +334,6 @@ const Index = () => {
                 </Button>
               </div>
             </div>
-            <Button variant="ghost" size="icon" className="rounded-full" onClick={() => setActiveView('profile')}>
-              <Icon name="User" size={24} />
-            </Button>
           </div>
           
           <div className="relative">
@@ -368,51 +362,86 @@ const Index = () => {
           ))}
         </div>
 
-        <Card 
-          className="overflow-hidden cursor-pointer hover:shadow-lg transition-shadow border-2 border-primary/20"
-          onClick={() => setActiveView('events')}
-        >
-          <CardContent className="p-0">
-            <div className="h-24 bg-gradient-to-r from-[#A62531] via-[#8B1E28] to-[#171B1F] flex items-center justify-between px-6 text-white">
-              <div>
-                <h3 className="text-xl font-bold mb-1">🎭 Афиша / События</h3>
-                <p className="text-sm text-white/90">Концерты, выставки, театры</p>
-              </div>
-              <div className="text-4xl">🎫</div>
-            </div>
-            <div className="p-4 bg-white">
-              <div className="flex items-center gap-2 text-sm text-muted-foreground">
-                <Icon name="Calendar" size={16} />
-                <span>Сегодня {events.filter(e => e.date === '28 янв').length} событий</span>
-              </div>
-            </div>
-          </CardContent>
-        </Card>
+        <div>
+          <div className="flex items-center justify-between mb-4">
+            <h2 className="text-xl font-bold">Специальные предложения</h2>
+            <Button variant="link" className="text-primary text-sm p-0">
+              Всё <Icon name="ChevronRight" size={16} className="ml-1" />
+            </Button>
+          </div>
+          <div className="flex gap-4 overflow-x-auto pb-2 scrollbar-hide snap-x snap-mandatory">
+            <Card 
+              className="min-w-[85%] overflow-hidden cursor-pointer hover:shadow-lg transition-shadow snap-start border-2 border-primary/20"
+              onClick={() => setActiveView('events')}
+            >
+              <CardContent className="p-0">
+                <div className="h-40 bg-gradient-to-r from-[#A62531] via-[#8B1E28] to-[#171B1F] flex items-center justify-between px-6 text-white relative overflow-hidden">
+                  <div className="absolute inset-0 opacity-10">
+                    <div className="absolute top-4 right-4 text-9xl">🎭</div>
+                  </div>
+                  <div className="relative z-10">
+                    <Badge className="bg-white/20 text-white border-0 mb-2">
+                      <Icon name="Sparkles" size={12} className="mr-1" />
+                      Популярное
+                    </Badge>
+                    <h3 className="text-2xl font-bold mb-2">Афиша / События</h3>
+                    <p className="text-sm text-white/90 mb-3">Концерты, выставки, театры</p>
+                    <div className="flex items-center gap-2 text-sm">
+                      <Icon name="Calendar" size={14} />
+                      <span>Сегодня {events.filter(e => e.date === '28 янв').length} событий</span>
+                    </div>
+                  </div>
+                  <div className="text-5xl relative z-10">🎫</div>
+                </div>
+              </CardContent>
+            </Card>
 
-        <div className="grid grid-cols-2 gap-4">
-          <Card className="overflow-hidden cursor-pointer hover:shadow-lg transition-shadow">
-            <CardContent className="p-0">
-              <div className="h-32 bg-gradient-to-br from-[#A62531] to-[#8B1E28] flex items-center justify-center text-white">
-                <div className="text-center">
-                  <Icon name="Percent" size={32} className="mx-auto mb-2" />
-                  <p className="font-bold">Акции</p>
-                  <p className="text-xs opacity-90">Скидки до 50%</p>
+            <Card className="min-w-[85%] overflow-hidden cursor-pointer hover:shadow-lg transition-shadow snap-start">
+              <CardContent className="p-0">
+                <div className="h-40 bg-gradient-to-br from-[#A62531] to-[#8B1E28] flex items-center justify-between px-6 text-white relative overflow-hidden">
+                  <div className="absolute inset-0 opacity-10">
+                    <div className="absolute -bottom-8 -right-8 text-9xl">%</div>
+                  </div>
+                  <div className="relative z-10">
+                    <Badge className="bg-white/20 text-white border-0 mb-2">
+                      <Icon name="Zap" size={12} className="mr-1" />
+                      Выгодно
+                    </Badge>
+                    <h3 className="text-2xl font-bold mb-2">Акции</h3>
+                    <p className="text-sm text-white/90 mb-3">Скидки до 50% в ресторанах и музеях</p>
+                    <div className="flex items-center gap-2 text-sm">
+                      <Icon name="Tag" size={14} />
+                      <span>12 активных предложений</span>
+                    </div>
+                  </div>
+                  <div className="text-5xl relative z-10">🎁</div>
                 </div>
-              </div>
-            </CardContent>
-          </Card>
-          
-          <Card className="overflow-hidden cursor-pointer hover:shadow-lg transition-shadow">
-            <CardContent className="p-0">
-              <div className="h-32 bg-gradient-to-br from-[#171B1F] to-[#2C3238] flex items-center justify-center text-white">
-                <div className="text-center">
-                  <Icon name="Calendar" size={32} className="mx-auto mb-2" />
-                  <p className="font-bold">События</p>
-                  <p className="text-xs opacity-90">Сегодня 12</p>
+              </CardContent>
+            </Card>
+
+            <Card className="min-w-[85%] overflow-hidden cursor-pointer hover:shadow-lg transition-shadow snap-start">
+              <CardContent className="p-0">
+                <div className="h-40 bg-gradient-to-br from-[#171B1F] to-[#2C3238] flex items-center justify-between px-6 text-white relative overflow-hidden">
+                  <div className="absolute inset-0 opacity-10">
+                    <div className="absolute top-4 right-4 text-9xl">📅</div>
+                  </div>
+                  <div className="relative z-10">
+                    <Badge className="bg-white/20 text-white border-0 mb-2">
+                      <Icon name="Star" size={12} className="mr-1" />
+                      Рекомендуем
+                    </Badge>
+                    <h3 className="text-2xl font-bold mb-2">Мероприятия</h3>
+                    <p className="text-sm text-white/90 mb-3">Квесты, фестивали, мастер-классы</p>
+                    <div className="flex items-center gap-2 text-sm">
+                      <Icon name="Calendar" size={14} />
+                      <span>На этой неделе 8 событий</span>
+                    </div>
+                  </div>
+                  <div className="text-5xl relative z-10">🎪</div>
                 </div>
-              </div>
-            </CardContent>
-          </Card>
+              </CardContent>
+            </Card>
+          </div>
         </div>
 
         <div>
@@ -638,9 +667,10 @@ const Index = () => {
             <Button 
               variant="ghost" 
               className="flex-col h-auto py-2 gap-1"
+              onClick={() => setMenuOpen(true)}
             >
-              <Icon name="Route" size={24} />
-              <span className="text-xs">Маршруты</span>
+              <Icon name="Menu" size={24} />
+              <span className="text-xs">Меню</span>
             </Button>
             <Button 
               variant="ghost" 
