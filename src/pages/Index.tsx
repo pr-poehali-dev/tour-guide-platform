@@ -322,8 +322,13 @@ const Index = () => {
     <div className="min-h-screen bg-gradient-to-br from-gray-50 via-white to-red-50 pb-24">
       <div className="sticky top-0 z-50 bg-white/95 backdrop-blur-lg border-b border-gray-200">
         <div className="max-w-7xl mx-auto px-4 py-4">
-          <div className="flex items-center justify-center mb-4">
-            <div className="text-center">
+          <div className="flex items-center justify-between mb-4">
+            <img 
+              src="https://cdn.poehali.dev/files/64a49d6f-83f4-44d5-b7da-71b61d2d24f4.jpg" 
+              alt="OTA Logo" 
+              className="h-10 w-auto object-contain"
+            />
+            <div className="flex-1 text-center">
               <h1 className="text-3xl font-bold gradient-primary bg-clip-text text-transparent">
                 OTAguide
               </h1>
@@ -340,6 +345,7 @@ const Index = () => {
                 </Button>
               </div>
             </div>
+            <div className="w-10"></div>
           </div>
           
           <div className="flex items-center gap-2">
