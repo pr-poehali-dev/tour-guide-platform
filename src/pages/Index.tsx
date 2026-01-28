@@ -22,6 +22,14 @@ const Index = () => {
   const [locationModalOpen, setLocationModalOpen] = useState(false);
   const [selectedRegion, setSelectedRegion] = useState('ДНР');
   const [selectedCity, setSelectedCity] = useState('Донецк');
+  const [notificationsEnabled, setNotificationsEnabled] = useState(true);
+  const [categoryNotifications, setCategoryNotifications] = useState({
+    museums: true,
+    parks: true,
+    restaurants: true,
+    entertainment: true,
+    lost: true
+  });
 
   const regions = {
     'ДНР': ['Донецк', 'Макеевка', 'Мариуполь', 'Шахтёрск', 'Снежное', 'Харцызск', 'Енакиево', 'Дебальцево', 'Мангуш', 'Новоазовск', 'Старобешево', 'Волноваха', 'Горловка', 'Амвросиевка', 'Тельманово', 'Зугрэс', 'Мелекино', 'Ялта', 'Урзуф', 'Володарское', 'Ясиноватая', 'Торез', 'Иловайск'],
@@ -1323,7 +1331,7 @@ const Index = () => {
                   <p className="text-sm text-muted-foreground">alex.ivanov@example.com</p>
                   <Badge variant="secondary" className="mt-2">
                     <Icon name="MapPin" size={12} className="mr-1" />
-                    Санкт-Петербург
+                    {selectedCity}
                   </Badge>
                 </div>
               </div>
