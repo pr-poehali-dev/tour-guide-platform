@@ -978,43 +978,11 @@ const Index = () => {
       <div className="min-h-screen bg-gray-50">
         <div className="sticky top-0 z-50 bg-white/95 backdrop-blur-lg border-b border-gray-200">
           <div className="max-w-7xl mx-auto px-4 py-4">
-            <div className="flex items-center justify-between">
-              <Button
-                variant="ghost"
-                size="icon"
-                onClick={() => setActiveView('home')}
-              >
-                <Icon name="ArrowLeft" size={24} />
-              </Button>
-              <h1 className="text-xl font-bold">Профиль</h1>
-              <div className="w-10" />
-            </div>
+            <h1 className="text-xl font-bold text-center">Профиль</h1>
           </div>
         </div>
 
-        <div className="max-w-7xl mx-auto px-4 py-6 space-y-6">
-          <Card className="overflow-hidden">
-            <CardContent className="p-6">
-              <div className="flex items-center gap-4 mb-6">
-                <div className="w-20 h-20 rounded-full bg-gradient-to-br from-primary to-[#8B1E28] flex items-center justify-center text-white text-3xl font-bold">
-                  АИ
-                </div>
-                <div className="flex-1">
-                  <h2 className="text-xl font-bold mb-1">Алексей Иванов</h2>
-                  <p className="text-sm text-muted-foreground">alex.ivanov@example.com</p>
-                  <Badge variant="secondary" className="mt-2">
-                    <Icon name="MapPin" size={12} className="mr-1" />
-                    Санкт-Петербург
-                  </Badge>
-                </div>
-              </div>
-              <Button variant="outline" className="w-full">
-                <Icon name="Settings" size={18} className="mr-2" />
-                Редактировать профиль
-              </Button>
-            </CardContent>
-          </Card>
-
+        <div className="max-w-7xl mx-auto px-4 py-6 space-y-4 pb-24">
           <Card className="overflow-hidden">
             <CardContent className="p-0">
               <div className="divide-y">
@@ -1023,10 +991,7 @@ const Index = () => {
                     <div className="w-10 h-10 rounded-lg bg-red-100 flex items-center justify-center">
                       <Icon name="Heart" size={20} className="text-primary" />
                     </div>
-                    <div className="text-left">
-                      <h3 className="font-semibold">Избранное</h3>
-                      <p className="text-sm text-muted-foreground">15 объектов</p>
-                    </div>
+                    <span className="font-medium">Избранное</span>
                   </div>
                   <Icon name="ChevronRight" size={20} className="text-muted-foreground" />
                 </button>
@@ -1036,10 +1001,7 @@ const Index = () => {
                     <div className="w-10 h-10 rounded-lg bg-gray-100 flex items-center justify-center">
                       <Icon name="History" size={20} className="text-gray-700" />
                     </div>
-                    <div className="text-left">
-                      <h3 className="font-semibold">История</h3>
-                      <p className="text-sm text-muted-foreground">Посещённые места</p>
-                    </div>
+                    <span className="font-medium">История</span>
                   </div>
                   <Icon name="ChevronRight" size={20} className="text-muted-foreground" />
                 </button>
@@ -1049,10 +1011,7 @@ const Index = () => {
                     <div className="w-10 h-10 rounded-lg bg-blue-100 flex items-center justify-center">
                       <Icon name="Download" size={20} className="text-blue-600" />
                     </div>
-                    <div className="text-left">
-                      <h3 className="font-semibold">Офлайн-карты</h3>
-                      <p className="text-sm text-muted-foreground">2 города загружено</p>
-                    </div>
+                    <span className="font-medium">Загрузки для работы без сети</span>
                   </div>
                   <Icon name="ChevronRight" size={20} className="text-muted-foreground" />
                 </button>
@@ -1063,32 +1022,14 @@ const Index = () => {
           <Card className="overflow-hidden">
             <CardContent className="p-6">
               <h2 className="text-lg font-bold mb-4 flex items-center gap-2">
-                <Icon name="Bell" size={20} />
-                Уведомления
+                <Icon name="Settings" size={20} />
+                Настройки
               </h2>
               
               <div className="space-y-4">
-                <div className="flex items-center justify-between">
-                  <div>
-                    <h3 className="font-medium">Все уведомления</h3>
-                    <p className="text-sm text-muted-foreground">Получать push-уведомления</p>
-                  </div>
-                  <button
-                    onClick={() => setNotificationsEnabled(!notificationsEnabled)}
-                    className={`relative w-12 h-6 rounded-full transition-colors ${
-                      notificationsEnabled ? 'bg-primary' : 'bg-gray-300'
-                    }`}
-                  >
-                    <div
-                      className={`absolute top-1 w-4 h-4 bg-white rounded-full transition-transform ${
-                        notificationsEnabled ? 'translate-x-7' : 'translate-x-1'
-                      }`}
-                    />
-                  </button>
-                </div>
-
-                {notificationsEnabled && (
-                  <div className="pl-4 space-y-3 border-l-2 border-gray-200">
+                <div>
+                  <h3 className="font-medium mb-3">Уведомления</h3>
+                  <div className="space-y-3 pl-2">
                     <div className="flex items-center justify-between">
                       <span className="text-sm">Музеи</span>
                       <button
@@ -1169,79 +1110,30 @@ const Index = () => {
                       </button>
                     </div>
                   </div>
-                )}
+                </div>
+
+                <div className="pt-4 border-t">
+                  <h3 className="font-medium mb-3">Приватность</h3>
+                  <Button 
+                    variant="outline" 
+                    className="w-full justify-start text-red-600 border-red-300 hover:bg-red-50"
+                  >
+                    <Icon name="Trash2" size={18} className="mr-2" />
+                    Удалить аккаунт
+                  </Button>
+                </div>
               </div>
             </CardContent>
           </Card>
 
           <Card className="overflow-hidden">
-            <CardContent className="p-0">
-              <div className="divide-y">
-                <button className="w-full px-6 py-4 flex items-center justify-between hover:bg-gray-50 transition-colors">
-                  <div className="flex items-center gap-3">
-                    <Icon name="Shield" size={20} className="text-gray-700" />
-                    <div className="text-left">
-                      <h3 className="font-semibold">Приватность и безопасность</h3>
-                      <p className="text-sm text-muted-foreground">Управление данными</p>
-                    </div>
-                  </div>
-                  <Icon name="ChevronRight" size={20} className="text-muted-foreground" />
-                </button>
-
-                <button className="w-full px-6 py-4 flex items-center justify-between hover:bg-gray-50 transition-colors">
-                  <div className="flex items-center gap-3">
-                    <Icon name="HelpCircle" size={20} className="text-gray-700" />
-                    <div className="text-left">
-                      <h3 className="font-semibold">Помощь и поддержка</h3>
-                      <p className="text-sm text-muted-foreground">FAQ, контакты</p>
-                    </div>
-                  </div>
-                  <Icon name="ChevronRight" size={20} className="text-muted-foreground" />
-                </button>
-
-                <button className="w-full px-6 py-4 flex items-center justify-between hover:bg-gray-50 transition-colors">
-                  <div className="flex items-center gap-3">
-                    <Icon name="Info" size={20} className="text-gray-700" />
-                    <div className="text-left">
-                      <h3 className="font-semibold">О приложении</h3>
-                      <p className="text-sm text-muted-foreground">Версия 1.0.0</p>
-                    </div>
-                  </div>
-                  <Icon name="ChevronRight" size={20} className="text-muted-foreground" />
-                </button>
-              </div>
-            </CardContent>
-          </Card>
-
-          <Card className="border-red-200 overflow-hidden">
-            <CardContent className="p-6">
-              <h2 className="text-lg font-bold mb-4 text-red-600 flex items-center gap-2">
-                <Icon name="AlertTriangle" size={20} />
-                Опасная зона
-              </h2>
-              
-              <div className="space-y-3">
-                <Button variant="outline" className="w-full justify-start text-orange-600 border-orange-300 hover:bg-orange-50">
-                  <Icon name="UserX" size={18} className="mr-2" />
-                  Деактивировать аккаунт
-                </Button>
-                
-                <Button variant="outline" className="w-full justify-start text-red-600 border-red-300 hover:bg-red-50">
-                  <Icon name="Trash2" size={18} className="mr-2" />
-                  Удалить аккаунт навсегда
-                </Button>
-              </div>
-            </CardContent>
-          </Card>
-
-          <Card className="overflow-hidden">
-            <CardContent className="p-6">
+            <CardContent className="p-4">
               <Button 
                 variant="ghost" 
                 className="w-full justify-center text-red-600 hover:text-red-700 hover:bg-red-50"
               >
                 <Icon name="LogOut" size={18} className="mr-2" />
-                Выйти из аккаунта
+                Выйти
               </Button>
             </CardContent>
           </Card>
