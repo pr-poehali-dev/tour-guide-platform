@@ -5,9 +5,10 @@ import { Card, CardContent } from '@/components/ui/card';
 import { Badge } from '@/components/ui/badge';
 import { Tabs, TabsContent, TabsList, TabsTrigger } from '@/components/ui/tabs';
 import Icon from '@/components/ui/icon';
+import { routes as routesData } from '@/data/appData';
 
 const Index = () => {
-  const [activeView, setActiveView] = useState<'home' | 'map' | 'object' | 'lost' | 'profile' | 'search' | 'events' | 'event' | 'quests' | 'news' | 'sos' | 'faq' | 'documents'>('home');
+  const [activeView, setActiveView] = useState<'home' | 'map' | 'object' | 'lost' | 'profile' | 'search' | 'events' | 'event' | 'quests' | 'news' | 'sos' | 'faq' | 'documents' | 'routes' | 'route' | 'favorites'>('home');
   const [selectedObject, setSelectedObject] = useState<any>(null);
   const [audioPlaying, setAudioPlaying] = useState(false);
   const [searchQuery, setSearchQuery] = useState('');
@@ -22,6 +23,11 @@ const Index = () => {
   const [locationModalOpen, setLocationModalOpen] = useState(false);
   const [selectedRegion, setSelectedRegion] = useState('ДНР');
   const [selectedCity, setSelectedCity] = useState('Донецк');
+  const [selectedRoute, setSelectedRoute] = useState<any>(null);
+  const [routeFilters, setRouteFilters] = useState<string[]>([]);
+  const [favoriteTab, setFavoriteTab] = useState<'objects' | 'routes' | 'collections'>('objects');
+  const [favoriteSearchQuery, setFavoriteSearchQuery] = useState('');
+  const [routes, setRoutes] = useState(routesData);
   const [notificationsEnabled, setNotificationsEnabled] = useState(true);
   const [categoryNotifications, setCategoryNotifications] = useState({
     museums: true,
@@ -336,13 +342,23 @@ const Index = () => {
             </div>
           </div>
           
-          <div className="relative">
-            <Icon name="Search" className="absolute left-3 top-1/2 -translate-y-1/2 text-muted-foreground" size={20} />
-            <Input 
-              placeholder="Музеи, парки, рестораны..." 
-              className="pl-10 pr-4 h-12 rounded-full border-2 border-gray-200 focus:border-primary"
-              onFocus={() => setActiveView('search')}
-            />
+          <div className="flex items-center gap-2">
+            <div className="relative flex-1">
+              <Icon name="Search" className="absolute left-3 top-1/2 -translate-y-1/2 text-muted-foreground" size={20} />
+              <Input 
+                placeholder="Музеи, парки, рестораны..." 
+                className="pl-10 pr-4 h-12 rounded-full border-2 border-gray-200 focus:border-primary"
+                onFocus={() => setActiveView('search')}
+              />
+            </div>
+            <Button 
+              variant="ghost" 
+              size="icon"
+              className="h-12 w-12 rounded-full flex-shrink-0"
+              onClick={() => setActiveView('favorites')}
+            >
+              <Icon name="Heart" size={24} className="text-primary" />
+            </Button>
           </div>
         </div>
       </div>
@@ -667,10 +683,10 @@ const Index = () => {
             <Button 
               variant="ghost" 
               className="flex-col h-auto py-2 gap-1"
-              onClick={() => setMenuOpen(true)}
+              onClick={() => setActiveView('routes')}
             >
-              <Icon name="Menu" size={24} />
-              <span className="text-xs">Меню</span>
+              <Icon name="Route" size={24} />
+              <span className="text-xs">Маршруты</span>
             </Button>
             <Button 
               variant="ghost" 
@@ -1608,6 +1624,20 @@ const Index = () => {
                   <Icon name="ChevronRight" size={20} className="text-muted-foreground" />
                 </button>
 
+                <button 
+                  className="w-full px-6 py-4 flex items-center justify-between hover:bg-gray-50 transition-colors"
+                  onClick={() => setMenuOpen(true)}
+                >
+                  <div className="flex items-center gap-3">
+                    <Icon name="Menu" size={20} className="text-gray-700" />
+                    <div className="text-left">
+                      <h3 className="font-semibold">Все разделы</h3>
+                      <p className="text-sm text-muted-foreground">Меню приложения</p>
+                    </div>
+                  </div>
+                  <Icon name="ChevronRight" size={20} className="text-muted-foreground" />
+                </button>
+
                 <button className="w-full px-6 py-4 flex items-center justify-between hover:bg-gray-50 transition-colors">
                   <div className="flex items-center gap-3">
                     <Icon name="Info" size={20} className="text-gray-700" />
@@ -2299,6 +2329,7 @@ const Index = () => {
   };
 
   const menuItems = [
+    { id: 'routes', name: 'Маршруты', icon: 'Route', emoji: '🗺️' },
     { id: 'quests', name: 'Квесты, квизы', icon: 'Gamepad2', emoji: '🎮' },
     { id: 'events', name: 'Афиша', icon: 'Calendar', emoji: '🎭' },
     { id: 'news', name: 'Новости и безопасность', icon: 'Newspaper', emoji: '📰' },
@@ -2421,6 +2452,455 @@ const Index = () => {
       </div>
     </div>
   );
+
+  const renderRoutes = () => {
+    const routeCategories = ['Все', 'Культура', 'Романтика', 'Литература', 'Еда', 'Природа', 'Вечерний'];
+    const filteredRoutes = routeFilters.length === 0 || routeFilters.includes('Все')
+      ? routes
+      : routes.filter(route => routeFilters.includes(route.category));
+
+    return (
+      <div className="min-h-screen bg-gradient-to-br from-gray-50 via-white to-red-50 pb-24">
+        <div className="sticky top-0 z-50 bg-white/95 backdrop-blur-lg border-b border-gray-200">
+          <div className="max-w-7xl mx-auto px-4 py-4">
+            <div className="flex items-center gap-3 mb-4">
+              <Button variant="ghost" size="icon" onClick={() => setActiveView('home')}>
+                <Icon name="ArrowLeft" size={24} />
+              </Button>
+              <h1 className="text-2xl font-bold flex-1">Маршруты</h1>
+              <Button 
+                variant="ghost" 
+                size="icon"
+                onClick={() => setActiveView('favorites')}
+              >
+                <Icon name="Heart" size={24} className="text-primary" />
+              </Button>
+            </div>
+
+            <div className="relative">
+              <Icon name="Search" className="absolute left-3 top-1/2 -translate-y-1/2 text-muted-foreground" size={20} />
+              <Input 
+                placeholder="Поиск маршрутов..." 
+                className="pl-10 pr-4 h-12 rounded-full border-2 border-gray-200 focus:border-primary"
+              />
+            </div>
+          </div>
+        </div>
+
+        <div className="max-w-7xl mx-auto px-4 py-6 space-y-6">
+          <div className="flex gap-2 overflow-x-auto pb-2 scrollbar-hide">
+            {routeCategories.map((category) => (
+              <Button
+                key={category}
+                variant={routeFilters.includes(category) || (category === 'Все' && routeFilters.length === 0) ? 'default' : 'outline'}
+                size="sm"
+                className="whitespace-nowrap"
+                onClick={() => {
+                  if (category === 'Все') {
+                    setRouteFilters([]);
+                  } else {
+                    setRouteFilters(
+                      routeFilters.includes(category)
+                        ? routeFilters.filter(f => f !== category)
+                        : [...routeFilters, category]
+                    );
+                  }
+                }}
+              >
+                {category}
+              </Button>
+            ))}
+          </div>
+
+          <div className="grid gap-4">
+            {filteredRoutes.map((route) => (
+              <Card 
+                key={route.id}
+                className="overflow-hidden cursor-pointer hover:shadow-lg transition-shadow"
+                onClick={() => {
+                  setSelectedRoute(route);
+                  setActiveView('route');
+                }}
+              >
+                <CardContent className="p-0">
+                  <div className="flex">
+                    <div className="w-32 h-32 bg-gradient-to-br from-primary to-secondary flex items-center justify-center text-6xl">
+                      {route.image}
+                    </div>
+                    <div className="flex-1 p-4">
+                      <div className="flex items-start justify-between mb-2">
+                        <div className="flex-1">
+                          <h3 className="font-bold text-lg mb-1">{route.title}</h3>
+                          <Badge variant="secondary" className="text-xs">
+                            {route.category}
+                          </Badge>
+                        </div>
+                        <Button
+                          variant="ghost"
+                          size="icon"
+                          className="h-8 w-8"
+                          onClick={(e) => {
+                            e.stopPropagation();
+                            setRoutes(routes.map(r => 
+                              r.id === route.id ? { ...r, isFavorite: !r.isFavorite } : r
+                            ));
+                          }}
+                        >
+                          <Icon 
+                            name="Heart" 
+                            size={18} 
+                            className={route.isFavorite ? 'fill-red-500 text-red-500' : ''} 
+                          />
+                        </Button>
+                      </div>
+                      <p className="text-sm text-muted-foreground mb-3 line-clamp-2">
+                        {route.description}
+                      </p>
+                      <div className="flex items-center gap-4 text-sm">
+                        <div className="flex items-center gap-1">
+                          <Icon name="Clock" size={14} className="text-muted-foreground" />
+                          <span>{route.duration}</span>
+                        </div>
+                        <div className="flex items-center gap-1">
+                          <Icon name="Route" size={14} className="text-muted-foreground" />
+                          <span>{route.distance}</span>
+                        </div>
+                        <div className="flex items-center gap-1">
+                          <Icon name="MapPin" size={14} className="text-muted-foreground" />
+                          <span>{route.stops} точек</span>
+                        </div>
+                        <div className="flex items-center gap-1 ml-auto">
+                          <Icon name="Star" size={14} className="text-yellow-500" />
+                          <span className="font-medium">{route.rating}</span>
+                          <span className="text-muted-foreground">({route.reviews})</span>
+                        </div>
+                      </div>
+                    </div>
+                  </div>
+                </CardContent>
+              </Card>
+            ))}
+          </div>
+        </div>
+      </div>
+    );
+  };
+
+  const renderRoute = () => {
+    if (!selectedRoute) return null;
+
+    return (
+      <div className="min-h-screen bg-gray-50 pb-24">
+        <div className="sticky top-0 z-50 bg-white border-b border-gray-200">
+          <div className="max-w-7xl mx-auto px-4 py-4">
+            <div className="flex items-center gap-3">
+              <Button variant="ghost" size="icon" onClick={() => setActiveView('routes')}>
+                <Icon name="ArrowLeft" size={24} />
+              </Button>
+              <h1 className="text-xl font-bold flex-1 line-clamp-1">{selectedRoute.title}</h1>
+              <Button
+                variant="ghost"
+                size="icon"
+                onClick={() => {
+                  setRoutes(routes.map(r => 
+                    r.id === selectedRoute.id ? { ...r, isFavorite: !r.isFavorite } : r
+                  ));
+                  setSelectedRoute({ ...selectedRoute, isFavorite: !selectedRoute.isFavorite });
+                }}
+              >
+                <Icon 
+                  name="Heart" 
+                  size={24} 
+                  className={selectedRoute.isFavorite ? 'fill-red-500 text-red-500' : ''} 
+                />
+              </Button>
+              <Button variant="ghost" size="icon">
+                <Icon name="Share2" size={24} />
+              </Button>
+            </div>
+          </div>
+        </div>
+
+        <div className="max-w-7xl mx-auto">
+          <div className="relative h-64 bg-gradient-to-br from-primary via-accent to-secondary flex items-center justify-center overflow-hidden">
+            <div className="absolute inset-0 opacity-10">
+              <div className="absolute top-8 right-8 text-9xl">{selectedRoute.image}</div>
+            </div>
+            <div className="text-8xl relative z-10">{selectedRoute.image}</div>
+          </div>
+
+          <div className="px-4 py-6 space-y-6">
+            <div>
+              <div className="flex items-start justify-between mb-4">
+                <div className="flex-1">
+                  <Badge variant="secondary" className="mb-2">
+                    {selectedRoute.category}
+                  </Badge>
+                  <h2 className="text-2xl font-bold mb-2">{selectedRoute.title}</h2>
+                  <p className="text-muted-foreground">{selectedRoute.description}</p>
+                </div>
+              </div>
+
+              <div className="grid grid-cols-3 gap-4">
+                <Card>
+                  <CardContent className="p-4 text-center">
+                    <Icon name="Clock" size={24} className="mx-auto mb-2 text-primary" />
+                    <p className="text-sm font-medium">{selectedRoute.duration}</p>
+                    <p className="text-xs text-muted-foreground">Время</p>
+                  </CardContent>
+                </Card>
+                <Card>
+                  <CardContent className="p-4 text-center">
+                    <Icon name="Route" size={24} className="mx-auto mb-2 text-primary" />
+                    <p className="text-sm font-medium">{selectedRoute.distance}</p>
+                    <p className="text-xs text-muted-foreground">Длина</p>
+                  </CardContent>
+                </Card>
+                <Card>
+                  <CardContent className="p-4 text-center">
+                    <Icon name="TrendingUp" size={24} className="mx-auto mb-2 text-primary" />
+                    <p className="text-sm font-medium">{selectedRoute.difficulty}</p>
+                    <p className="text-xs text-muted-foreground">Сложность</p>
+                  </CardContent>
+                </Card>
+              </div>
+            </div>
+
+            <Card>
+              <CardContent className="p-4">
+                <div className="flex items-center justify-between mb-4">
+                  <h3 className="font-bold">Точки маршрута</h3>
+                  <Badge variant="secondary">{selectedRoute.stops} точек</Badge>
+                </div>
+                <div className="space-y-3">
+                  {selectedRoute.points.map((point: any, index: number) => (
+                    <div key={point.id} className="flex items-center gap-4">
+                      <div className="w-10 h-10 rounded-full bg-primary text-white flex items-center justify-center font-bold flex-shrink-0">
+                        {index + 1}
+                      </div>
+                      <div className="text-3xl">{point.emoji}</div>
+                      <div className="flex-1">
+                        <p className="font-medium">{point.name}</p>
+                        <p className="text-sm text-muted-foreground">{point.time}</p>
+                      </div>
+                      <Icon name="ChevronRight" size={20} className="text-muted-foreground" />
+                    </div>
+                  ))}
+                </div>
+              </CardContent>
+            </Card>
+
+            <Card className="bg-gray-200">
+              <CardContent className="p-6 text-center">
+                <Icon name="Map" size={48} className="mx-auto mb-3 text-muted-foreground" />
+                <p className="text-muted-foreground mb-4">Интерактивная карта маршрута</p>
+                <Button variant="outline" size="sm">
+                  Открыть на карте
+                </Button>
+              </CardContent>
+            </Card>
+
+            <div className="flex items-center gap-2 text-sm">
+              <Icon name="Star" size={16} className="text-yellow-500" />
+              <span className="font-medium">{selectedRoute.rating}</span>
+              <span className="text-muted-foreground">({selectedRoute.reviews} отзывов)</span>
+            </div>
+
+            <div className="grid grid-cols-2 gap-3">
+              <Button className="w-full" size="lg">
+                <Icon name="Play" size={18} className="mr-2" />
+                Начать маршрут
+              </Button>
+              <Button variant="outline" className="w-full" size="lg">
+                <Icon name="Download" size={18} className="mr-2" />
+                Офлайн
+              </Button>
+            </div>
+          </div>
+        </div>
+      </div>
+    );
+  };
+
+  const renderFavorites = () => {
+    const favoriteRoutes = routes.filter(r => r.isFavorite);
+    const favoriteObjects = objects.filter(obj => obj.id === 1 || obj.id === 2);
+
+    let filteredItems: any[] = [];
+    if (favoriteTab === 'routes') {
+      filteredItems = favoriteRoutes.filter(r => 
+        favoriteSearchQuery === '' || 
+        r.title.toLowerCase().includes(favoriteSearchQuery.toLowerCase())
+      );
+    } else if (favoriteTab === 'objects') {
+      filteredItems = favoriteObjects.filter(obj => 
+        favoriteSearchQuery === '' || 
+        obj.name.toLowerCase().includes(favoriteSearchQuery.toLowerCase())
+      );
+    }
+
+    return (
+      <div className="min-h-screen bg-gray-50 pb-24">
+        <div className="sticky top-0 z-50 bg-white/95 backdrop-blur-lg border-b border-gray-200">
+          <div className="max-w-7xl mx-auto px-4 py-4">
+            <div className="flex items-center gap-3 mb-4">
+              <Button variant="ghost" size="icon" onClick={() => setActiveView('home')}>
+                <Icon name="ArrowLeft" size={24} />
+              </Button>
+              <h1 className="text-2xl font-bold flex-1">Избранное</h1>
+            </div>
+
+            <div className="relative mb-4">
+              <Icon name="Search" className="absolute left-3 top-1/2 -translate-y-1/2 text-muted-foreground" size={20} />
+              <Input 
+                placeholder="Поиск в избранном..." 
+                className="pl-10 pr-4 h-12 rounded-full border-2 border-gray-200 focus:border-primary"
+                value={favoriteSearchQuery}
+                onChange={(e) => setFavoriteSearchQuery(e.target.value)}
+              />
+            </div>
+
+            <Tabs value={favoriteTab} onValueChange={(v) => setFavoriteTab(v as any)}>
+              <TabsList className="w-full grid grid-cols-3">
+                <TabsTrigger value="objects" className="gap-2">
+                  <Icon name="MapPin" size={16} />
+                  Объекты
+                </TabsTrigger>
+                <TabsTrigger value="routes" className="gap-2">
+                  <Icon name="Route" size={16} />
+                  Маршруты
+                </TabsTrigger>
+                <TabsTrigger value="collections" className="gap-2">
+                  <Icon name="FolderHeart" size={16} />
+                  Подборки
+                </TabsTrigger>
+              </TabsList>
+            </Tabs>
+          </div>
+        </div>
+
+        <div className="max-w-7xl mx-auto px-4 py-6">
+          {favoriteTab === 'objects' && (
+            <div className="space-y-4">
+              {filteredItems.length === 0 ? (
+                <div className="text-center py-12">
+                  <Icon name="Heart" size={64} className="mx-auto mb-4 text-muted-foreground" />
+                  <h3 className="font-bold text-xl mb-2">Нет избранных объектов</h3>
+                  <p className="text-muted-foreground mb-6">
+                    Добавляйте интересные места в избранное
+                  </p>
+                  <Button onClick={() => setActiveView('home')}>
+                    Перейти к объектам
+                  </Button>
+                </div>
+              ) : (
+                filteredItems.map((obj) => (
+                  <Card 
+                    key={obj.id}
+                    className="overflow-hidden cursor-pointer hover:shadow-lg transition-shadow"
+                    onClick={() => {
+                      setSelectedObject(obj);
+                      setActiveView('object');
+                    }}
+                  >
+                    <CardContent className="p-4">
+                      <div className="flex items-start gap-4">
+                        <div className="text-5xl">{obj.image}</div>
+                        <div className="flex-1 min-w-0">
+                          <div className="flex items-center gap-2 mb-1">
+                            <h3 className="font-bold">{obj.name}</h3>
+                            {obj.verified && (
+                              <Icon name="BadgeCheck" size={16} className="text-primary" />
+                            )}
+                          </div>
+                          <p className="text-sm text-muted-foreground mb-2">{obj.category}</p>
+                          <div className="flex items-center gap-3 text-sm">
+                            <div className="flex items-center gap-1">
+                              <Icon name="Star" size={14} className="text-yellow-500" />
+                              <span className="font-medium">{obj.rating}</span>
+                            </div>
+                            <div className="flex items-center gap-1 text-muted-foreground">
+                              <Icon name="Navigation" size={14} />
+                              <span>{obj.distance}</span>
+                            </div>
+                          </div>
+                        </div>
+                        <Button variant="ghost" size="icon" className="h-9 w-9">
+                          <Icon name="Heart" size={18} className="fill-red-500 text-red-500" />
+                        </Button>
+                      </div>
+                    </CardContent>
+                  </Card>
+                ))
+              )}
+            </div>
+          )}
+
+          {favoriteTab === 'routes' && (
+            <div className="space-y-4">
+              {filteredItems.length === 0 ? (
+                <div className="text-center py-12">
+                  <Icon name="Route" size={64} className="mx-auto mb-4 text-muted-foreground" />
+                  <h3 className="font-bold text-xl mb-2">Нет избранных маршрутов</h3>
+                  <p className="text-muted-foreground mb-6">
+                    Сохраняйте интересные маршруты в избранное
+                  </p>
+                  <Button onClick={() => setActiveView('routes')}>
+                    Перейти к маршрутам
+                  </Button>
+                </div>
+              ) : (
+                filteredItems.map((route) => (
+                  <Card 
+                    key={route.id}
+                    className="overflow-hidden cursor-pointer hover:shadow-lg transition-shadow"
+                    onClick={() => {
+                      setSelectedRoute(route);
+                      setActiveView('route');
+                    }}
+                  >
+                    <CardContent className="p-0">
+                      <div className="flex">
+                        <div className="w-24 h-24 bg-gradient-to-br from-primary to-secondary flex items-center justify-center text-5xl">
+                          {route.image}
+                        </div>
+                        <div className="flex-1 p-4">
+                          <h3 className="font-bold mb-1">{route.title}</h3>
+                          <p className="text-sm text-muted-foreground mb-2 line-clamp-1">
+                            {route.description}
+                          </p>
+                          <div className="flex items-center gap-3 text-xs">
+                            <span>{route.duration}</span>
+                            <span>•</span>
+                            <span>{route.distance}</span>
+                            <span>•</span>
+                            <span>{route.stops} точек</span>
+                          </div>
+                        </div>
+                        <Button variant="ghost" size="icon" className="h-9 w-9 mr-4 self-center">
+                          <Icon name="Heart" size={18} className="fill-red-500 text-red-500" />
+                        </Button>
+                      </div>
+                    </CardContent>
+                  </Card>
+                ))
+              )}
+            </div>
+          )}
+
+          {favoriteTab === 'collections' && (
+            <div className="text-center py-12">
+              <Icon name="FolderHeart" size={64} className="mx-auto mb-4 text-muted-foreground" />
+              <h3 className="font-bold text-xl mb-2">Подборки</h3>
+              <p className="text-muted-foreground">
+                Создавайте собственные подборки мест и маршрутов
+              </p>
+            </div>
+          )}
+        </div>
+      </div>
+    );
+  };
 
   return (
     <>
@@ -2580,6 +3060,9 @@ const Index = () => {
       {activeView === 'sos' && renderSOS()}
       {activeView === 'faq' && renderFAQ()}
       {activeView === 'documents' && renderDocuments()}
+      {activeView === 'routes' && renderRoutes()}
+      {activeView === 'route' && renderRoute()}
+      {activeView === 'favorites' && renderFavorites()}
     </>
   );
 };

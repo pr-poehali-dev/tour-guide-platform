@@ -279,9 +279,150 @@ export const objects = [
   },
 ];
 
+export const routes = [
+  {
+    id: 1,
+    title: 'Классический Петербург',
+    description: 'Главные достопримечательности центра города за один день',
+    duration: '4-5 часов',
+    distance: '8.5 км',
+    difficulty: 'Легкий',
+    image: '🏛️',
+    rating: 4.9,
+    reviews: 1247,
+    stops: 8,
+    category: 'Культура',
+    isFavorite: false,
+    points: [
+      { id: 1, name: 'Дворцовая площадь', time: '30 мин', emoji: '🏰' },
+      { id: 2, name: 'Эрмитаж', time: '90 мин', emoji: '🎨' },
+      { id: 3, name: 'Невский проспект', time: '45 мин', emoji: '🚶' },
+      { id: 4, name: 'Казанский собор', time: '20 мин', emoji: '⛪' },
+      { id: 5, name: 'Храм Спаса на Крови', time: '30 мин', emoji: '🕌' },
+      { id: 6, name: 'Марсово поле', time: '15 мин', emoji: '🌳' },
+      { id: 7, name: 'Летний сад', time: '30 мин', emoji: '🌿' },
+      { id: 8, name: 'Михайловский замок', time: '20 мин', emoji: '🏰' }
+    ]
+  },
+  {
+    id: 2,
+    title: 'Романтика Петербурга',
+    description: 'Живописные места для прогулок и фотографий',
+    duration: '3-4 часа',
+    distance: '5.2 км',
+    difficulty: 'Легкий',
+    image: '💕',
+    rating: 4.8,
+    reviews: 892,
+    stops: 6,
+    category: 'Романтика',
+    isFavorite: true,
+    points: [
+      { id: 1, name: 'Дворцовый мост', time: '20 мин', emoji: '🌉' },
+      { id: 2, name: 'Стрелка Васильевского острова', time: '30 мин', emoji: '🏛️' },
+      { id: 3, name: 'Набережная Мойки', time: '40 мин', emoji: '🛶' },
+      { id: 4, name: 'Исаакиевский собор', time: '45 мин', emoji: '⛪' },
+      { id: 5, name: 'Юсуповский сад', time: '30 мин', emoji: '🌳' },
+      { id: 6, name: 'Набережная Фонтанки', time: '25 мин', emoji: '💧' }
+    ]
+  },
+  {
+    id: 3,
+    title: 'Петербург Достоевского',
+    description: 'Литературный маршрут по местам из романов писателя',
+    duration: '5-6 часов',
+    distance: '10.3 км',
+    difficulty: 'Средний',
+    image: '📚',
+    rating: 4.7,
+    reviews: 567,
+    stops: 10,
+    category: 'Литература',
+    isFavorite: false,
+    points: [
+      { id: 1, name: 'Дом Раскольникова', time: '25 мин', emoji: '🏚️' },
+      { id: 2, name: 'Сенная площадь', time: '20 мин', emoji: '🏛️' },
+      { id: 3, name: 'Канал Грибоедова', time: '30 мин', emoji: '🌊' },
+      { id: 4, name: 'Дом старухи-процентщицы', time: '15 мин', emoji: '🏘️' },
+      { id: 5, name: 'Кокушкин мост', time: '10 мин', emoji: '🌉' },
+      { id: 6, name: 'Вознесенский проспект', time: '25 мин', emoji: '🚶' },
+      { id: 7, name: 'Музей Достоевского', time: '60 мин', emoji: '📖' },
+      { id: 8, name: 'Владимирская площадь', time: '15 мин', emoji: '⛪' },
+      { id: 9, name: 'Кузнечный переулок', time: '20 мин', emoji: '🔨' },
+      { id: 10, name: 'Некрополь мастеров искусств', time: '30 мин', emoji: '🪦' }
+    ]
+  },
+  {
+    id: 4,
+    title: 'Гастрономический тур',
+    description: 'Лучшие рестораны и кафе с русской кухней',
+    duration: '6-7 часов',
+    distance: '4.8 км',
+    difficulty: 'Легкий',
+    image: '🍽️',
+    rating: 4.9,
+    reviews: 1034,
+    stops: 5,
+    category: 'Еда',
+    isFavorite: true,
+    points: [
+      { id: 1, name: 'Кафе "Пушкинъ"', time: '90 мин', emoji: '☕' },
+      { id: 2, name: 'Ресторан "Палкинъ"', time: '120 мин', emoji: '🍴' },
+      { id: 3, name: 'Пышечная на Большой Конюшенной', time: '20 мин', emoji: '🥐' },
+      { id: 4, name: 'Чайная "Придворная кондитерская"', time: '60 мин', emoji: '🍰' },
+      { id: 5, name: 'Ресторан "Теремокъ"', time: '90 мин', emoji: '🥞' }
+    ]
+  },
+  {
+    id: 5,
+    title: 'Парки и сады',
+    description: 'Зелёные оазисы города для отдыха и прогулок',
+    duration: '4 часа',
+    distance: '12.5 км',
+    difficulty: 'Средний',
+    image: '🌳',
+    rating: 4.6,
+    reviews: 723,
+    stops: 7,
+    category: 'Природа',
+    isFavorite: false,
+    points: [
+      { id: 1, name: 'Летний сад', time: '45 мин', emoji: '🌿' },
+      { id: 2, name: 'Михайловский сад', time: '30 мин', emoji: '🏞️' },
+      { id: 3, name: 'Таврический сад', time: '40 мин', emoji: '🌲' },
+      { id: 4, name: 'Екатерингофский парк', time: '35 мин', emoji: '🍃' },
+      { id: 5, name: 'Юсуповский сад', time: '30 мин', emoji: '🌺' },
+      { id: 6, name: 'Александровский парк', time: '40 мин', emoji: '🦁' },
+      { id: 7, name: 'Парк 300-летия', time: '50 мин', emoji: '⛲' }
+    ]
+  },
+  {
+    id: 6,
+    title: 'Ночной Петербург',
+    description: 'Развод мостов и ночная подсветка достопримечательностей',
+    duration: '3 часа',
+    distance: '6.2 км',
+    difficulty: 'Легкий',
+    image: '🌙',
+    rating: 5.0,
+    reviews: 1521,
+    stops: 5,
+    category: 'Вечерний',
+    isFavorite: true,
+    points: [
+      { id: 1, name: 'Дворцовый мост', time: '40 мин', emoji: '🌉' },
+      { id: 2, name: 'Троицкий мост', time: '30 мин', emoji: '🌃' },
+      { id: 3, name: 'Литейный мост', time: '25 мin', emoji: '🏙️' },
+      { id: 4, name: 'Благовещенский мост', time: '30 мин', emoji: '✨' },
+      { id: 5, name: 'Дворцовая набережная', time: '45 мин', emoji: '🌟' }
+    ]
+  }
+];
+
 export const menuItems = [
   { id: 'home', name: 'Главная', emoji: '🏠' },
   { id: 'map', name: 'Карта', emoji: '🗺️' },
+  { id: 'routes', name: 'Маршруты', emoji: '🗺️' },
   { id: 'events', name: 'Афиша / События', emoji: '🎭' },
   { id: 'quests', name: 'Квесты', emoji: '🎯' },
   { id: 'lost', name: 'Потеряшки', emoji: '🔍' },
