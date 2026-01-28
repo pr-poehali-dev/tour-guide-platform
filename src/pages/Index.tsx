@@ -279,42 +279,224 @@ const Index = () => {
   const objects = [
     {
       id: 1,
-      name: 'Эрмитаж',
+      name: 'Донецкий республиканский областной художественный музей',
       category: 'Музей',
       rating: 4.9,
-      reviews: 2847,
+      reviews: 847,
       distance: '1.2 км',
       verified: true,
       safetyZone: 'safe',
-      image: '🏛️',
+      image: '🎨',
       audioAvailable: true,
-      description: 'Один из крупнейших и значимых художественных и культурно-исторических музеев России и мира.',
+      description: 'Крупнейший художественный музей Донбасса с богатой коллекцией живописи и скульптуры.',
     },
     {
       id: 2,
-      name: 'Летний сад',
+      name: 'Центральный парк культуры и отдыха имени А. С. Щербакова',
       category: 'Парк',
-      rating: 4.7,
+      rating: 4.8,
       reviews: 1523,
       distance: '0.8 км',
       verified: true,
       safetyZone: 'safe',
       image: '🌳',
       audioAvailable: true,
-      description: 'Парк в центре Санкт-Петербурга, памятник садово-паркового искусства первой трети XVIII века.',
+      description: 'Главный парк Донецка с аттракционами, зелёными аллеями и зонами отдыха для всей семьи.',
     },
     {
       id: 3,
-      name: 'Кафе "Пушкинъ"',
+      name: 'Татарочка',
       category: 'Ресторан',
-      rating: 4.8,
-      reviews: 892,
-      distance: '0.3 км',
+      rating: 4.7,
+      reviews: 392,
+      distance: '0.5 км',
       verified: true,
       safetyZone: 'safe',
       image: '🍽️',
       audioAvailable: false,
-      description: 'Легендарный ресторан русской кухни с аутентичной атмосферой XIX века.',
+      description: 'Ресторан татарской кухни с домашней атмосферой и аутентичными блюдами.',
+    },
+    {
+      id: 4,
+      name: 'Парк кованых фигур',
+      category: 'Парк',
+      rating: 4.9,
+      reviews: 1247,
+      distance: '1.5 км',
+      verified: true,
+      safetyZone: 'safe',
+      image: '⚒️',
+      audioAvailable: true,
+      description: 'Уникальный парк с коллекцией кованых скульптур и арт-объектов под открытым небом.',
+    },
+    {
+      id: 5,
+      name: 'Хмели-летели',
+      category: 'Ресторан',
+      rating: 4.6,
+      reviews: 567,
+      distance: '0.7 км',
+      verified: true,
+      safetyZone: 'safe',
+      image: '🍺',
+      audioAvailable: false,
+      description: 'Пивной ресторан с широким выбором напитков и европейской кухней.',
+    },
+    {
+      id: 6,
+      name: 'Донецкий государственный академический театр оперы и балета имени А. Б. Соловьяненко',
+      category: 'Развлечение',
+      rating: 5.0,
+      reviews: 934,
+      distance: '2.1 км',
+      verified: true,
+      safetyZone: 'safe',
+      image: '🎭',
+      audioAvailable: true,
+      description: 'Главный оперный театр Донбасса с богатой историей и великолепными постановками.',
+    },
+    {
+      id: 7,
+      name: 'Парк славянской культуры и письменности',
+      category: 'Парк',
+      rating: 4.7,
+      reviews: 678,
+      distance: '2.3 км',
+      verified: true,
+      safetyZone: 'safe',
+      image: '📖',
+      audioAvailable: true,
+      description: 'Культурно-исторический парк, посвящённый славянской письменности и культуре.',
+    },
+    {
+      id: 8,
+      name: 'Чача Пури',
+      category: 'Ресторан',
+      rating: 4.8,
+      reviews: 423,
+      distance: '1.1 км',
+      verified: true,
+      safetyZone: 'safe',
+      image: '🇬🇪',
+      audioAvailable: false,
+      description: 'Ресторан грузинской кухни с хачапури, хинкали и другими традиционными блюдами.',
+    },
+    {
+      id: 9,
+      name: 'Донецкий республиканский краеведческий музей',
+      category: 'Музей',
+      rating: 4.7,
+      reviews: 512,
+      distance: '1.4 км',
+      verified: true,
+      safetyZone: 'safe',
+      image: '🏛️',
+      audioAvailable: true,
+      description: 'Музей истории Донбасса с экспозициями о природе, археологии и культуре региона.',
+    },
+    {
+      id: 10,
+      name: 'Цирк "Космос"',
+      category: 'Развлечение',
+      rating: 4.9,
+      reviews: 1156,
+      distance: '1.8 км',
+      verified: true,
+      safetyZone: 'safe',
+      image: '🎪',
+      audioAvailable: false,
+      description: 'Донецкий цирк с яркими представлениями и программами для всей семьи.',
+    },
+    {
+      id: 11,
+      name: 'Штальман',
+      category: 'Ресторан',
+      rating: 4.8,
+      reviews: 689,
+      distance: '0.9 км',
+      verified: true,
+      safetyZone: 'safe',
+      image: '🥩',
+      audioAvailable: false,
+      description: 'Стейк-хаус с премиальным мясом и авторскими блюдами.',
+    },
+    {
+      id: 12,
+      name: 'Парк "Гуливер"',
+      category: 'Парк',
+      rating: 4.6,
+      reviews: 834,
+      distance: '2.7 км',
+      verified: true,
+      safetyZone: 'safe',
+      image: '🎢',
+      audioAvailable: false,
+      description: 'Семейный парк развлечений с аттракционами и игровыми площадками.',
+    },
+    {
+      id: 13,
+      name: 'Аквапарк «Аквасфера»',
+      category: 'Развлечение',
+      rating: 4.8,
+      reviews: 1423,
+      distance: '3.2 км',
+      verified: true,
+      safetyZone: 'safe',
+      image: '🏊',
+      audioAvailable: false,
+      description: 'Современный аквапарк с горками, бассейнами и зонами отдыха.',
+    },
+    {
+      id: 14,
+      name: 'Дивино',
+      category: 'Ресторан',
+      rating: 4.7,
+      reviews: 345,
+      distance: '1.3 км',
+      verified: true,
+      safetyZone: 'safe',
+      image: '🍷',
+      audioAvailable: false,
+      description: 'Ресторан итальянской кухни с винной картой и уютной атмосферой.',
+    },
+    {
+      id: 15,
+      name: 'Художественный музей Арт-Донбасс',
+      category: 'Музей',
+      rating: 4.6,
+      reviews: 267,
+      distance: '1.7 км',
+      verified: true,
+      safetyZone: 'safe',
+      image: '🖼️',
+      audioAvailable: true,
+      description: 'Современный художественный музей с выставками местных и зарубежных художников.',
+    },
+    {
+      id: 16,
+      name: 'Вулкан Парк',
+      category: 'Развлечение',
+      rating: 4.5,
+      reviews: 892,
+      distance: '2.5 км',
+      verified: true,
+      safetyZone: 'safe',
+      image: '🎰',
+      audioAvailable: false,
+      description: 'Развлекательный центр с игровыми автоматами и зонами отдыха.',
+    },
+    {
+      id: 17,
+      name: 'Кинотеатр "Звёздочка"',
+      category: 'Развлечение',
+      rating: 4.7,
+      reviews: 634,
+      distance: '1.0 км',
+      verified: true,
+      safetyZone: 'safe',
+      image: '🎬',
+      audioAvailable: false,
+      description: 'Современный кинотеатр с удобными залами и новинками проката.',
     },
   ];
 
@@ -375,6 +557,10 @@ const Index = () => {
             <button 
               key={cat.id} 
               className="flex flex-col items-center gap-2 p-3 rounded-xl hover:bg-gray-100 transition-colors"
+              onClick={() => {
+                setSelectedFilters([cat.name]);
+                setActiveView('map');
+              }}
             >
               <div className={`w-14 h-14 bg-gradient-to-br ${cat.gradient} rounded-2xl flex items-center justify-center text-white shadow-lg`}>
                 <Icon name={cat.icon as any} size={26} />
@@ -468,13 +654,13 @@ const Index = () => {
 
         <div>
           <div className="flex items-center justify-between mb-4">
-            <h2 className="text-xl font-bold">Популярное сейчас</h2>
+            <h2 className="text-xl font-bold">Рекомендуем для вас</h2>
             <Button variant="link" className="text-primary text-sm p-0">
               Всё <Icon name="ChevronRight" size={16} className="ml-1" />
             </Button>
           </div>
           <div className="flex gap-4 overflow-x-auto pb-2 scrollbar-hide">
-            {objects.map((obj) => (
+            {objects.filter(obj => [6, 10, 13, 17].includes(obj.id)).map((obj) => (
               <Card 
                 key={obj.id}
                 className="min-w-[280px] overflow-hidden cursor-pointer hover:shadow-lg transition-shadow"
@@ -485,7 +671,7 @@ const Index = () => {
               >
                 <CardContent className="p-4">
                   <div className="text-5xl mb-3">{obj.image}</div>
-                  <h3 className="font-bold mb-1">{obj.name}</h3>
+                  <h3 className="font-bold mb-1 line-clamp-2">{obj.name}</h3>
                   <p className="text-sm text-muted-foreground mb-2">{obj.category}</p>
                   <div className="flex items-center justify-between text-sm">
                     <div className="flex items-center gap-1">
@@ -494,6 +680,101 @@ const Index = () => {
                       <span className="text-muted-foreground">({obj.reviews})</span>
                     </div>
                     <span className="text-muted-foreground">{obj.distance}</span>
+                  </div>
+                </CardContent>
+              </Card>
+            ))}
+          </div>
+        </div>
+
+        <div>
+          <div className="flex items-center justify-between mb-4">
+            <h2 className="text-xl font-bold">Популярное сейчас</h2>
+            <Button variant="link" className="text-primary text-sm p-0">
+              Всё <Icon name="ChevronRight" size={16} className="ml-1" />
+            </Button>
+          </div>
+          <div className="flex gap-4 overflow-x-auto pb-2 scrollbar-hide">
+            {objects.filter(obj => [1, 2, 4, 7, 9].includes(obj.id)).map((obj) => (
+              <Card 
+                key={obj.id}
+                className="min-w-[280px] overflow-hidden cursor-pointer hover:shadow-lg transition-shadow"
+                onClick={() => {
+                  setSelectedObject(obj);
+                  setActiveView('object');
+                }}
+              >
+                <CardContent className="p-4">
+                  <div className="text-5xl mb-3">{obj.image}</div>
+                  <h3 className="font-bold mb-1 line-clamp-2">{obj.name}</h3>
+                  <p className="text-sm text-muted-foreground mb-2">{obj.category}</p>
+                  <div className="flex items-center justify-between text-sm">
+                    <div className="flex items-center gap-1">
+                      <Icon name="Star" size={14} className="text-yellow-500" />
+                      <span className="font-medium">{obj.rating}</span>
+                      <span className="text-muted-foreground">({obj.reviews})</span>
+                    </div>
+                    <span className="text-muted-foreground">{obj.distance}</span>
+                  </div>
+                </CardContent>
+              </Card>
+            ))}
+          </div>
+        </div>
+
+        <div>
+          <div className="flex items-center justify-between mb-4">
+            <h2 className="text-xl font-bold">Рядом с вами</h2>
+            <Badge variant="secondary" className="gradient-accent text-white">
+              <Icon name="Navigation" size={14} className="mr-1" />
+              В радиусе 3 км
+            </Badge>
+          </div>
+          
+          <div className="grid gap-4">
+            {objects.filter(obj => [3, 5, 8, 11, 14].includes(obj.id)).map((obj) => (
+              <Card 
+                key={obj.id}
+                className="overflow-hidden cursor-pointer hover:shadow-lg transition-shadow"
+                onClick={() => {
+                  setSelectedObject(obj);
+                  setActiveView('object');
+                }}
+              >
+                <CardContent className="p-4">
+                  <div className="flex items-start gap-4">
+                    <div className="text-5xl">{obj.image}</div>
+                    
+                    <div className="flex-1 min-w-0">
+                      <div className="flex items-center gap-2 mb-1">
+                        <h3 className="font-bold line-clamp-1">{obj.name}</h3>
+                        {obj.verified && (
+                          <Icon name="BadgeCheck" size={16} className="text-primary" />
+                        )}
+                      </div>
+                      <p className="text-sm text-muted-foreground mb-2">{obj.category}</p>
+                      
+                      <div className="flex items-center gap-3 text-sm">
+                        <div className="flex items-center gap-1">
+                          <Icon name="Star" size={14} className="text-yellow-500" />
+                          <span className="font-medium">{obj.rating}</span>
+                        </div>
+                        <div className="flex items-center gap-1 text-muted-foreground">
+                          <Icon name="Navigation" size={14} />
+                          <span>{obj.distance}</span>
+                        </div>
+                        {obj.audioAvailable && (
+                          <Badge variant="outline" className="border-primary text-primary text-xs">
+                            <Icon name="Headphones" size={10} className="mr-1" />
+                            Аудио
+                          </Badge>
+                        )}
+                      </div>
+                    </div>
+                    
+                    <Button variant="ghost" size="icon" className="h-9 w-9">
+                      <Icon name="Heart" size={18} />
+                    </Button>
                   </div>
                 </CardContent>
               </Card>
