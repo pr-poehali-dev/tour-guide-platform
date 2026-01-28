@@ -973,6 +973,25 @@ const Index = () => {
       entertainment: true,
       lost: true
     });
+    const [selectedLanguage, setSelectedLanguage] = useState('ru');
+    const [selectedCurrency, setSelectedCurrency] = useState('RUB');
+
+    const languages = [
+      { code: 'ru', name: 'Русский', flag: '🇷🇺' },
+      { code: 'en', name: 'English', flag: '🇬🇧' },
+      { code: 'es', name: 'Español', flag: '🇪🇸' },
+      { code: 'fr', name: 'Français', flag: '🇫🇷' },
+      { code: 'de', name: 'Deutsch', flag: '🇩🇪' },
+      { code: 'zh', name: '中文', flag: '🇨🇳' }
+    ];
+
+    const currencies = [
+      { code: 'RUB', name: 'Российский рубль', symbol: '₽' },
+      { code: 'USD', name: 'Доллар США', symbol: '$' },
+      { code: 'EUR', name: 'Евро', symbol: '€' },
+      { code: 'GBP', name: 'Фунт стерлингов', symbol: '£' },
+      { code: 'CNY', name: 'Китайский юань', symbol: '¥' }
+    ];
 
     return (
       <div className="min-h-screen bg-gray-50">
@@ -1046,6 +1065,56 @@ const Index = () => {
                   </div>
                   <Icon name="ChevronRight" size={20} className="text-muted-foreground" />
                 </button>
+              </div>
+            </CardContent>
+          </Card>
+
+          <Card className="overflow-hidden">
+            <CardContent className="p-6">
+              <h2 className="text-lg font-bold mb-4 flex items-center gap-2">
+                <Icon name="Globe" size={20} />
+                Язык и регион
+              </h2>
+              
+              <div className="space-y-4">
+                <div>
+                  <label className="text-sm font-medium text-muted-foreground mb-2 block">Язык интерфейса</label>
+                  <select
+                    value={selectedLanguage}
+                    onChange={(e) => setSelectedLanguage(e.target.value)}
+                    className="w-full px-4 py-3 border border-gray-300 rounded-lg focus:outline-none focus:ring-2 focus:ring-primary bg-white"
+                  >
+                    {languages.map((lang) => (
+                      <option key={lang.code} value={lang.code}>
+                        {lang.flag} {lang.name}
+                      </option>
+                    ))}
+                  </select>
+                </div>
+
+                <div>
+                  <label className="text-sm font-medium text-muted-foreground mb-2 block">Валюта</label>
+                  <select
+                    value={selectedCurrency}
+                    onChange={(e) => setSelectedCurrency(e.target.value)}
+                    className="w-full px-4 py-3 border border-gray-300 rounded-lg focus:outline-none focus:ring-2 focus:ring-primary bg-white"
+                  >
+                    {currencies.map((currency) => (
+                      <option key={currency.code} value={currency.code}>
+                        {currency.symbol} {currency.name}
+                      </option>
+                    ))}
+                  </select>
+                </div>
+
+                <div className="pt-4 border-t">
+                  <p className="text-sm text-muted-foreground">
+                    Выбранный язык: <span className="font-medium text-foreground">{languages.find(l => l.code === selectedLanguage)?.name}</span>
+                  </p>
+                  <p className="text-sm text-muted-foreground mt-1">
+                    Валюта: <span className="font-medium text-foreground">{currencies.find(c => c.code === selectedCurrency)?.name} ({currencies.find(c => c.code === selectedCurrency)?.symbol})</span>
+                  </p>
+                </div>
               </div>
             </CardContent>
           </Card>
