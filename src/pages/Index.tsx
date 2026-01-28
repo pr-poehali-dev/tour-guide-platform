@@ -7,12 +7,17 @@ import { Tabs, TabsContent, TabsList, TabsTrigger } from '@/components/ui/tabs';
 import Icon from '@/components/ui/icon';
 
 const Index = () => {
-  const [activeView, setActiveView] = useState<'home' | 'map' | 'object' | 'lost' | 'profile' | 'search'>('home');
+  const [activeView, setActiveView] = useState<'home' | 'map' | 'object' | 'lost' | 'profile' | 'search' | 'events' | 'event'>('home');
   const [selectedObject, setSelectedObject] = useState<any>(null);
   const [audioPlaying, setAudioPlaying] = useState(false);
   const [searchQuery, setSearchQuery] = useState('');
   const [searchHistory, setSearchHistory] = useState<string[]>(['Эрмитаж', 'Летний сад', 'Рестораны у Невского']);
   const [selectedFilters, setSelectedFilters] = useState<string[]>([]);
+  const [selectedEvent, setSelectedEvent] = useState<any>(null);
+  const [eventsLoading, setEventsLoading] = useState(false);
+  const [eventsOffline, setEventsOffline] = useState(false);
+  const [eventDateFilter, setEventDateFilter] = useState<'all' | 'today' | 'week' | 'month'>('all');
+  const [eventTypeFilter, setEventTypeFilter] = useState<string[]>([]);
 
   const lostItems = [
     {
@@ -104,6 +109,145 @@ const Index = () => {
     { id: 4, name: 'Развлечения', icon: 'Sparkles', count: 42, gradient: 'from-[#8B1E28] to-[#A62531]' },
   ];
 
+  const events = [
+    {
+      id: 1,
+      title: 'Выставка "Импрессионисты"',
+      type: 'Выставка',
+      date: '28 янв',
+      dateTime: '2026-01-28',
+      time: '10:00 - 20:00',
+      location: 'Эрмитаж',
+      locationId: 1,
+      price: 'от 600 ₽',
+      image: '🎨',
+      verified: true,
+      rating: 4.9,
+      reviews: 342,
+      description: 'Уникальная выставка произведений французских импрессионистов из частных коллекций.',
+      distance: '1.2 км'
+    },
+    {
+      id: 2,
+      title: 'Концерт "Времена года"',
+      type: 'Концерт',
+      date: '29 янв',
+      dateTime: '2026-01-29',
+      time: '19:00',
+      location: 'Мариинский театр',
+      locationId: null,
+      price: 'от 2000 ₽',
+      image: '🎻',
+      verified: true,
+      rating: 5.0,
+      reviews: 156,
+      description: 'Концерт классической музыки. Исполняется произведение Вивальди "Времена года".',
+      distance: '3.5 км'
+    },
+    {
+      id: 3,
+      title: 'Спектакль "Евгений Онегин"',
+      type: 'Театр',
+      date: '30 янв',
+      dateTime: '2026-01-30',
+      time: '18:30',
+      location: 'Александринский театр',
+      locationId: null,
+      price: 'от 1500 ₽',
+      image: '🎭',
+      verified: true,
+      rating: 4.8,
+      reviews: 234,
+      description: 'Классическая постановка по роману в стихах А.С. Пушкина.',
+      distance: '2.1 км'
+    },
+    {
+      id: 4,
+      title: 'Фестиваль света',
+      type: 'Фестиваль',
+      date: '1 фев',
+      dateTime: '2026-02-01',
+      time: '18:00 - 23:00',
+      location: 'Дворцовая площадь',
+      locationId: null,
+      price: 'Бесплатно',
+      image: '💡',
+      verified: true,
+      rating: 4.9,
+      reviews: 567,
+      description: 'Грандиозное световое шоу на Дворцовой площади. Проекции на фасады зданий.',
+      distance: '0.8 км'
+    },
+    {
+      id: 5,
+      title: 'Мастер-класс по живописи',
+      type: 'Мастер-класс',
+      date: '2 фев',
+      dateTime: '2026-02-02',
+      time: '14:00 - 17:00',
+      location: 'Русский музей',
+      locationId: null,
+      price: 'от 800 ₽',
+      image: '🖌️',
+      verified: false,
+      rating: 4.7,
+      reviews: 89,
+      description: 'Научитесь основам живописи маслом под руководством профессионального художника.',
+      distance: '1.8 км'
+    },
+    {
+      id: 6,
+      title: 'Джазовый вечер',
+      type: 'Концерт',
+      date: '3 фев',
+      dateTime: '2026-02-03',
+      time: '20:00',
+      location: 'JFC Jazz Club',
+      locationId: null,
+      price: 'от 1000 ₽',
+      image: '🎷',
+      verified: true,
+      rating: 4.8,
+      reviews: 178,
+      description: 'Вечер живой джазовой музыки с известными российскими музыкантами.',
+      distance: '2.7 км'
+    },
+    {
+      id: 7,
+      title: 'Кинопоказ под открытым небом',
+      type: 'Кино',
+      date: '28 янв',
+      dateTime: '2026-01-28',
+      time: '21:00',
+      location: 'Летний сад',
+      locationId: 2,
+      price: 'Бесплатно',
+      image: '🎬',
+      verified: true,
+      rating: 4.6,
+      reviews: 234,
+      description: 'Показ классического советского кино в парке. Берите пледы!',
+      distance: '0.8 км'
+    },
+    {
+      id: 8,
+      title: 'Экскурсия "Тайны Петербурга"',
+      type: 'Экскурсия',
+      date: '29 янв',
+      dateTime: '2026-01-29',
+      time: '11:00 - 14:00',
+      location: 'Невский проспект',
+      locationId: null,
+      price: 'от 500 ₽',
+      image: '🚶',
+      verified: true,
+      rating: 4.9,
+      reviews: 445,
+      description: 'Пешеходная экскурсия по историческому центру с профессиональным гидом.',
+      distance: '0.5 км'
+    }
+  ];
+
   const objects = [
     {
       id: 1,
@@ -193,6 +337,27 @@ const Index = () => {
             </button>
           ))}
         </div>
+
+        <Card 
+          className="overflow-hidden cursor-pointer hover:shadow-lg transition-shadow border-2 border-primary/20"
+          onClick={() => setActiveView('events')}
+        >
+          <CardContent className="p-0">
+            <div className="h-24 bg-gradient-to-r from-[#A62531] via-[#8B1E28] to-[#171B1F] flex items-center justify-between px-6 text-white">
+              <div>
+                <h3 className="text-xl font-bold mb-1">🎭 Афиша / События</h3>
+                <p className="text-sm text-white/90">Концерты, выставки, театры</p>
+              </div>
+              <div className="text-4xl">🎫</div>
+            </div>
+            <div className="p-4 bg-white">
+              <div className="flex items-center gap-2 text-sm text-muted-foreground">
+                <Icon name="Calendar" size={16} />
+                <span>Сегодня {events.filter(e => e.date === '28 янв').length} событий</span>
+              </div>
+            </div>
+          </CardContent>
+        </Card>
 
         <div className="grid grid-cols-2 gap-4">
           <Card className="overflow-hidden cursor-pointer hover:shadow-lg transition-shadow">
@@ -1693,6 +1858,386 @@ const Index = () => {
     );
   };
 
+  const renderEvents = () => {
+    const dateFilters = [
+      { id: 'all', name: 'Все даты', icon: 'Calendar' },
+      { id: 'today', name: 'Сегодня', icon: 'CalendarClock' },
+      { id: 'week', name: 'На неделе', icon: 'CalendarDays' },
+      { id: 'month', name: 'В этом месяце', icon: 'CalendarRange' }
+    ];
+
+    const typeFilters = ['Концерт', 'Выставка', 'Театр', 'Фестиваль', 'Мастер-класс', 'Экскурсия', 'Кино'];
+
+    const filteredEvents = events.filter(event => {
+      const typeMatch = eventTypeFilter.length === 0 || eventTypeFilter.includes(event.type);
+      
+      let dateMatch = true;
+      if (eventDateFilter === 'today') {
+        dateMatch = event.date === '28 янв';
+      } else if (eventDateFilter === 'week') {
+        dateMatch = ['28 янв', '29 янв', '30 янв'].includes(event.date);
+      }
+      
+      return typeMatch && dateMatch;
+    });
+
+    if (eventsLoading) {
+      return (
+        <div className="min-h-screen bg-white flex items-center justify-center">
+          <div className="text-center">
+            <div className="inline-block animate-spin rounded-full h-12 w-12 border-4 border-primary border-t-transparent mb-4"></div>
+            <p className="text-muted-foreground">Загружаем события...</p>
+          </div>
+        </div>
+      );
+    }
+
+    if (eventsOffline) {
+      return (
+        <div className="min-h-screen bg-white">
+          <div className="sticky top-0 z-50 bg-white border-b border-gray-200">
+            <div className="max-w-7xl mx-auto px-4 py-4">
+              <div className="flex items-center gap-3">
+                <Button variant="ghost" size="icon" onClick={() => setActiveView('home')}>
+                  <Icon name="ArrowLeft" size={24} />
+                </Button>
+                <h1 className="text-2xl font-bold">Афиша / События</h1>
+              </div>
+            </div>
+          </div>
+
+          <div className="max-w-7xl mx-auto px-4 py-12">
+            <div className="text-center">
+              <Icon name="WifiOff" size={64} className="mx-auto text-muted-foreground mb-4" />
+              <h3 className="font-bold text-xl mb-2">Нет подключения к интернету</h3>
+              <p className="text-muted-foreground mb-6">
+                Показываем последние сохранённые события
+              </p>
+              <div className="bg-yellow-50 border border-yellow-200 rounded-lg p-4 mb-6">
+                <div className="flex items-start gap-3">
+                  <Icon name="Info" size={20} className="text-yellow-600 mt-0.5" />
+                  <div className="text-left text-sm">
+                    <p className="font-medium text-yellow-800 mb-1">Кэшированные данные</p>
+                    <p className="text-yellow-700">Информация может быть устаревшей. Подключитесь к интернету для обновления.</p>
+                  </div>
+                </div>
+              </div>
+              <Button onClick={() => setEventsOffline(false)}>
+                <Icon name="RefreshCw" size={16} className="mr-2" />
+                Повторить попытку
+              </Button>
+            </div>
+
+            <div className="mt-8 space-y-4 opacity-60">
+              {events.slice(0, 3).map(event => (
+                <Card key={event.id} className="overflow-hidden">
+                  <CardContent className="p-4">
+                    <div className="flex items-start gap-4">
+                      <div className="text-4xl">{event.image}</div>
+                      <div className="flex-1">
+                        <h3 className="font-bold">{event.title}</h3>
+                        <p className="text-sm text-muted-foreground">{event.location}</p>
+                      </div>
+                    </div>
+                  </CardContent>
+                </Card>
+              ))}
+            </div>
+          </div>
+        </div>
+      );
+    }
+
+    return (
+      <div className="min-h-screen bg-gradient-to-br from-gray-50 via-white to-red-50 pb-24">
+        <div className="sticky top-0 z-50 bg-white/95 backdrop-blur-lg border-b border-gray-200">
+          <div className="max-w-7xl mx-auto px-4 py-4">
+            <div className="flex items-center gap-3 mb-4">
+              <Button variant="ghost" size="icon" onClick={() => setActiveView('home')}>
+                <Icon name="ArrowLeft" size={24} />
+              </Button>
+              <div className="flex-1">
+                <h1 className="text-2xl font-bold">Афиша / События</h1>
+                <p className="text-sm text-muted-foreground">
+                  {filteredEvents.length} {filteredEvents.length === 1 ? 'событие' : 'событий'}
+                </p>
+              </div>
+              <Button variant="ghost" size="icon">
+                <Icon name="Search" size={20} />
+              </Button>
+            </div>
+
+            <Tabs value={eventDateFilter} onValueChange={(v) => setEventDateFilter(v as any)} className="mb-4">
+              <TabsList className="w-full grid grid-cols-4 h-auto p-1">
+                {dateFilters.map(filter => (
+                  <TabsTrigger 
+                    key={filter.id} 
+                    value={filter.id}
+                    className="text-xs py-2 data-[state=active]:bg-primary data-[state=active]:text-white"
+                  >
+                    <Icon name={filter.icon as any} size={14} className="mr-1" />
+                    {filter.name}
+                  </TabsTrigger>
+                ))}
+              </TabsList>
+            </Tabs>
+
+            <div className="flex gap-2 overflow-x-auto pb-2 scrollbar-hide">
+              {typeFilters.map((type) => (
+                <Badge
+                  key={type}
+                  variant={eventTypeFilter.includes(type) ? 'default' : 'outline'}
+                  className={`cursor-pointer whitespace-nowrap ${
+                    eventTypeFilter.includes(type) 
+                      ? 'gradient-primary text-white' 
+                      : 'hover:bg-gray-100'
+                  }`}
+                  onClick={() => {
+                    if (eventTypeFilter.includes(type)) {
+                      setEventTypeFilter(eventTypeFilter.filter(t => t !== type));
+                    } else {
+                      setEventTypeFilter([...eventTypeFilter, type]);
+                    }
+                  }}
+                >
+                  {type}
+                </Badge>
+              ))}
+            </div>
+          </div>
+        </div>
+
+        <div className="max-w-7xl mx-auto px-4 py-6">
+          {filteredEvents.length === 0 ? (
+            <div className="text-center py-12">
+              <Icon name="Calendar" size={64} className="mx-auto text-muted-foreground mb-4" />
+              <h3 className="font-bold text-xl mb-2">Нет событий</h3>
+              <p className="text-muted-foreground mb-6">
+                По выбранным фильтрам ничего не найдено
+              </p>
+              <Button 
+                variant="outline"
+                onClick={() => {
+                  setEventDateFilter('all');
+                  setEventTypeFilter([]);
+                }}
+              >
+                Сбросить фильтры
+              </Button>
+            </div>
+          ) : (
+            <div className="space-y-4">
+              {filteredEvents.map((event) => (
+                <Card 
+                  key={event.id}
+                  className="overflow-hidden cursor-pointer hover:shadow-lg transition-shadow"
+                  onClick={() => {
+                    setSelectedEvent(event);
+                    setActiveView('event');
+                  }}
+                >
+                  <CardContent className="p-0">
+                    <div className="flex items-start gap-4 p-4">
+                      <div className="text-5xl">{event.image}</div>
+                      
+                      <div className="flex-1 min-w-0">
+                        <div className="flex items-center gap-2 mb-1">
+                          <h3 className="font-bold">{event.title}</h3>
+                          {event.verified && (
+                            <Icon name="BadgeCheck" size={16} className="text-primary" />
+                          )}
+                        </div>
+                        
+                        <Badge variant="outline" className="mb-2 text-xs">
+                          {event.type}
+                        </Badge>
+
+                        <div className="space-y-1 text-sm">
+                          <div className="flex items-center gap-2 text-muted-foreground">
+                            <Icon name="Calendar" size={14} />
+                            <span>{event.date} • {event.time}</span>
+                          </div>
+                          <div className="flex items-center gap-2 text-muted-foreground">
+                            <Icon name="MapPin" size={14} />
+                            <span>{event.location}</span>
+                          </div>
+                          <div className="flex items-center gap-3 mt-2">
+                            <div className="flex items-center gap-1">
+                              <Icon name="Star" size={14} className="text-yellow-500" />
+                              <span className="font-medium">{event.rating}</span>
+                              <span className="text-muted-foreground">({event.reviews})</span>
+                            </div>
+                            <span className="font-semibold text-primary">{event.price}</span>
+                          </div>
+                        </div>
+                      </div>
+                      
+                      <Button variant="ghost" size="icon" className="h-9 w-9" onClick={(e) => e.stopPropagation()}>
+                        <Icon name="Heart" size={18} />
+                      </Button>
+                    </div>
+                  </CardContent>
+                </Card>
+              ))}
+            </div>
+          )}
+        </div>
+
+        <div className="fixed bottom-0 left-0 right-0 bg-white border-t border-gray-200 safe-area-bottom">
+          <div className="max-w-7xl mx-auto px-4 py-3">
+            <div className="flex items-center justify-around">
+              <Button variant="ghost" className="flex-col h-auto py-2 gap-1" onClick={() => setActiveView('home')}>
+                <Icon name="Home" size={24} />
+                <span className="text-xs">Главная</span>
+              </Button>
+              <Button variant="ghost" className="flex-col h-auto py-2 gap-1" onClick={() => setActiveView('map')}>
+                <Icon name="Map" size={24} />
+                <span className="text-xs">Карта</span>
+              </Button>
+              <Button variant="ghost" className="flex-col h-auto py-2 gap-1" onClick={() => setActiveView('lost')}>
+                <Icon name="Search" size={24} />
+                <span className="text-xs">Потеряшки</span>
+              </Button>
+              <Button variant="ghost" className="flex-col h-auto py-2 gap-1" onClick={() => setActiveView('profile')}>
+                <Icon name="User" size={24} />
+                <span className="text-xs">Профиль</span>
+              </Button>
+            </div>
+          </div>
+        </div>
+      </div>
+    );
+  };
+
+  const renderEvent = () => {
+    if (!selectedEvent) return null;
+
+    const relatedObject = selectedEvent.locationId ? objects.find(obj => obj.id === selectedEvent.locationId) : null;
+
+    return (
+      <div className="min-h-screen bg-white">
+        <div className="sticky top-0 z-50 bg-white/95 backdrop-blur-lg border-b border-gray-200">
+          <div className="max-w-7xl mx-auto px-4 py-4">
+            <div className="flex items-center gap-3">
+              <Button variant="ghost" size="icon" onClick={() => setActiveView('events')}>
+                <Icon name="ArrowLeft" size={24} />
+              </Button>
+              <h1 className="text-xl font-bold flex-1">Событие</h1>
+              <Button variant="ghost" size="icon">
+                <Icon name="Share2" size={20} />
+              </Button>
+              <Button variant="ghost" size="icon">
+                <Icon name="Heart" size={20} />
+              </Button>
+            </div>
+          </div>
+        </div>
+
+        <div className="max-w-7xl mx-auto px-4 py-6 space-y-6">
+          <div className="text-center">
+            <div className="text-7xl mb-4">{selectedEvent.image}</div>
+            <Badge variant="outline" className="mb-3">
+              {selectedEvent.type}
+            </Badge>
+            <h1 className="text-2xl font-bold mb-2">{selectedEvent.title}</h1>
+            
+            <div className="flex items-center justify-center gap-4 text-sm mb-4">
+              <div className="flex items-center gap-1">
+                <Icon name="Star" size={16} className="text-yellow-500" />
+                <span className="font-medium">{selectedEvent.rating}</span>
+                <span className="text-muted-foreground">({selectedEvent.reviews} отзывов)</span>
+              </div>
+              {selectedEvent.verified && (
+                <Badge variant="outline" className="border-primary text-primary">
+                  <Icon name="BadgeCheck" size={12} className="mr-1" />
+                  Проверено
+                </Badge>
+              )}
+            </div>
+          </div>
+
+          <Card>
+            <CardContent className="p-6 space-y-4">
+              <div className="flex items-start gap-3">
+                <Icon name="Calendar" size={20} className="text-primary mt-0.5" />
+                <div>
+                  <p className="font-semibold">Дата и время</p>
+                  <p className="text-sm text-muted-foreground">{selectedEvent.date} • {selectedEvent.time}</p>
+                </div>
+              </div>
+
+              <div className="flex items-start gap-3">
+                <Icon name="MapPin" size={20} className="text-primary mt-0.5" />
+                <div className="flex-1">
+                  <p className="font-semibold">Место проведения</p>
+                  <p className="text-sm text-muted-foreground mb-2">{selectedEvent.location}</p>
+                  {relatedObject && (
+                    <Button 
+                      variant="outline" 
+                      size="sm"
+                      onClick={() => {
+                        setSelectedObject(relatedObject);
+                        setActiveView('object');
+                      }}
+                    >
+                      <Icon name="Info" size={14} className="mr-1" />
+                      Информация о месте
+                    </Button>
+                  )}
+                </div>
+              </div>
+
+              <div className="flex items-start gap-3">
+                <Icon name="Navigation" size={20} className="text-primary mt-0.5" />
+                <div>
+                  <p className="font-semibold">Расстояние</p>
+                  <p className="text-sm text-muted-foreground">{selectedEvent.distance} от вас</p>
+                </div>
+              </div>
+
+              <div className="flex items-start gap-3">
+                <Icon name="Wallet" size={20} className="text-primary mt-0.5" />
+                <div>
+                  <p className="font-semibold">Стоимость</p>
+                  <p className="text-sm text-muted-foreground">{selectedEvent.price}</p>
+                </div>
+              </div>
+            </CardContent>
+          </Card>
+
+          <Card>
+            <CardContent className="p-6">
+              <h3 className="font-bold text-lg mb-3">Описание</h3>
+              <p className="text-muted-foreground leading-relaxed">
+                {selectedEvent.description}
+              </p>
+            </CardContent>
+          </Card>
+
+          <div className="grid grid-cols-2 gap-3 pb-6">
+            <Button 
+              variant="outline" 
+              className="w-full"
+              onClick={() => setActiveView('map')}
+            >
+              <Icon name="Navigation" size={18} className="mr-2" />
+              Маршрут
+            </Button>
+            <Button 
+              className="w-full gradient-primary"
+              onClick={() => {
+                alert('Переход на покупку билета');
+              }}
+            >
+              <Icon name="Ticket" size={18} className="mr-2" />
+              Купить билет
+            </Button>
+          </div>
+        </div>
+      </div>
+    );
+  };
+
   return (
     <>
       {activeView === 'home' && renderHome()}
@@ -1701,6 +2246,8 @@ const Index = () => {
       {activeView === 'lost' && renderLost()}
       {activeView === 'profile' && renderProfile()}
       {activeView === 'search' && renderSearch()}
+      {activeView === 'events' && renderEvents()}
+      {activeView === 'event' && renderEvent()}
     </>
   );
 };
