@@ -7,9 +7,12 @@ import { Tabs, TabsContent, TabsList, TabsTrigger } from '@/components/ui/tabs';
 import Icon from '@/components/ui/icon';
 
 const Index = () => {
-  const [activeView, setActiveView] = useState<'home' | 'map' | 'object' | 'lost' | 'profile'>('home');
+  const [activeView, setActiveView] = useState<'home' | 'map' | 'object' | 'lost' | 'profile' | 'search'>('home');
   const [selectedObject, setSelectedObject] = useState<any>(null);
   const [audioPlaying, setAudioPlaying] = useState(false);
+  const [searchQuery, setSearchQuery] = useState('');
+  const [searchHistory, setSearchHistory] = useState<string[]>(['Эрмитаж', 'Летний сад', 'Рестораны у Невского']);
+  const [selectedFilters, setSelectedFilters] = useState<string[]>([]);
 
   const lostItems = [
     {
@@ -170,6 +173,7 @@ const Index = () => {
             <Input 
               placeholder="Музеи, парки, рестораны..." 
               className="pl-10 pr-4 h-12 rounded-full border-2 border-gray-200 focus:border-primary"
+              onFocus={() => setActiveView('search')}
             />
           </div>
         </div>
@@ -1469,6 +1473,226 @@ const Index = () => {
     );
   };
 
+  const renderSearch = () => {
+    const suggestions = [
+      { text: 'Эрмитаж', type: 'Музей', icon: '🏛️' },
+      { text: 'Летний сад', type: 'Парк', icon: '🌳' },
+      { text: 'Петергоф', type: 'Дворец', icon: '⛲' },
+      { text: 'Мариинский театр', type: 'Театр', icon: '🎭' },
+      { text: 'Исаакиевский собор', type: 'Храм', icon: '⛪' },
+      { text: 'Невский проспект', type: 'Улица', icon: '🏙️' }
+    ];
+
+    const allObjects = [
+      ...objects,
+      { id: 4, name: 'Петергоф', category: 'Дворец', rating: 4.9, reviews: 3421, distance: '12.3 км', image: '⛲', verified: true, audioAvailable: true },
+      { id: 5, name: 'Исаакиевский собор', category: 'Храм', rating: 4.8, reviews: 2156, distance: '2.1 км', image: '⛪', verified: true, audioAvailable: true },
+      { id: 6, name: 'Невский проспект', category: 'Улица', rating: 4.7, reviews: 1876, distance: '0.5 км', image: '🏙️', verified: true, audioAvailable: false }
+    ];
+
+    const filters = ['Музеи', 'Парки', 'Рестораны', 'Развлечения', 'С аудиогидом', 'Рядом со мной'];
+
+    const filteredResults = searchQuery 
+      ? allObjects.filter(obj => 
+          obj.name.toLowerCase().includes(searchQuery.toLowerCase()) ||
+          obj.category.toLowerCase().includes(searchQuery.toLowerCase())
+        )
+      : [];
+
+    const handleSearch = (query: string) => {
+      setSearchQuery(query);
+      if (query && !searchHistory.includes(query)) {
+        setSearchHistory([query, ...searchHistory.slice(0, 4)]);
+      }
+    };
+
+    return (
+      <div className="min-h-screen bg-white">
+        <div className="sticky top-0 z-50 bg-white border-b border-gray-200">
+          <div className="max-w-7xl mx-auto px-4 py-4">
+            <div className="flex items-center gap-3 mb-4">
+              <Button 
+                variant="ghost" 
+                size="icon"
+                onClick={() => {
+                  setActiveView('home');
+                  setSearchQuery('');
+                }}
+              >
+                <Icon name="ArrowLeft" size={24} />
+              </Button>
+              <div className="relative flex-1">
+                <Icon name="Search" className="absolute left-3 top-1/2 -translate-y-1/2 text-muted-foreground" size={20} />
+                <Input 
+                  placeholder="Поиск мест, маршрутов, событий..." 
+                  className="pl-10 pr-10 h-12 rounded-full border-2 border-gray-200 focus:border-primary"
+                  value={searchQuery}
+                  onChange={(e) => setSearchQuery(e.target.value)}
+                  autoFocus
+                />
+                {searchQuery && (
+                  <Button 
+                    variant="ghost" 
+                    size="icon"
+                    className="absolute right-1 top-1/2 -translate-y-1/2 h-8 w-8"
+                    onClick={() => setSearchQuery('')}
+                  >
+                    <Icon name="X" size={16} />
+                  </Button>
+                )}
+              </div>
+            </div>
+
+            <div className="flex gap-2 overflow-x-auto pb-2 scrollbar-hide">
+              {filters.map((filter) => (
+                <Badge
+                  key={filter}
+                  variant={selectedFilters.includes(filter) ? 'default' : 'outline'}
+                  className={`cursor-pointer whitespace-nowrap ${
+                    selectedFilters.includes(filter) 
+                      ? 'gradient-primary text-white' 
+                      : 'hover:bg-gray-100'
+                  }`}
+                  onClick={() => {
+                    if (selectedFilters.includes(filter)) {
+                      setSelectedFilters(selectedFilters.filter(f => f !== filter));
+                    } else {
+                      setSelectedFilters([...selectedFilters, filter]);
+                    }
+                  }}
+                >
+                  {filter}
+                </Badge>
+              ))}
+            </div>
+          </div>
+        </div>
+
+        <div className="max-w-7xl mx-auto px-4 py-6 space-y-6">
+          {!searchQuery && searchHistory.length > 0 && (
+            <div>
+              <div className="flex items-center justify-between mb-4">
+                <h3 className="font-bold text-lg">История поиска</h3>
+                <Button 
+                  variant="ghost" 
+                  size="sm"
+                  className="text-red-600 hover:text-red-700"
+                  onClick={() => setSearchHistory([])}
+                >
+                  <Icon name="Trash2" size={16} className="mr-1" />
+                  Очистить
+                </Button>
+              </div>
+              <div className="space-y-2">
+                {searchHistory.map((query, i) => (
+                  <button
+                    key={i}
+                    className="w-full flex items-center gap-3 p-3 rounded-lg hover:bg-gray-50 transition-colors"
+                    onClick={() => handleSearch(query)}
+                  >
+                    <Icon name="Clock" size={20} className="text-muted-foreground" />
+                    <span className="flex-1 text-left">{query}</span>
+                    <Icon name="ArrowUpLeft" size={16} className="text-muted-foreground" />
+                  </button>
+                ))}
+              </div>
+            </div>
+          )}
+
+          {!searchQuery && (
+            <div>
+              <h3 className="font-bold text-lg mb-4">Популярные запросы</h3>
+              <div className="grid gap-3">
+                {suggestions.map((suggestion, i) => (
+                  <button
+                    key={i}
+                    className="flex items-center gap-3 p-4 rounded-xl border hover:border-primary hover:bg-gray-50 transition-colors"
+                    onClick={() => handleSearch(suggestion.text)}
+                  >
+                    <div className="text-3xl">{suggestion.icon}</div>
+                    <div className="flex-1 text-left">
+                      <h4 className="font-semibold">{suggestion.text}</h4>
+                      <p className="text-sm text-muted-foreground">{suggestion.type}</p>
+                    </div>
+                    <Icon name="ChevronRight" size={20} className="text-muted-foreground" />
+                  </button>
+                ))}
+              </div>
+            </div>
+          )}
+
+          {searchQuery && filteredResults.length === 0 && (
+            <div className="text-center py-12">
+              <Icon name="SearchX" size={48} className="mx-auto text-muted-foreground mb-4" />
+              <h3 className="font-bold text-lg mb-2">Ничего не найдено</h3>
+              <p className="text-muted-foreground">
+                Попробуйте изменить запрос или фильтры
+              </p>
+            </div>
+          )}
+
+          {searchQuery && filteredResults.length > 0 && (
+            <div>
+              <h3 className="font-bold text-lg mb-4">
+                Найдено: {filteredResults.length} {filteredResults.length === 1 ? 'результат' : 'результатов'}
+              </h3>
+              <div className="space-y-4">
+                {filteredResults.map((obj) => (
+                  <Card 
+                    key={obj.id}
+                    className="overflow-hidden cursor-pointer hover:shadow-lg transition-shadow"
+                    onClick={() => {
+                      setSelectedObject(obj);
+                      setActiveView('object');
+                    }}
+                  >
+                    <CardContent className="p-4">
+                      <div className="flex items-start gap-4">
+                        <div className="text-5xl">{obj.image}</div>
+                        
+                        <div className="flex-1 min-w-0">
+                          <div className="flex items-center gap-2 mb-1">
+                            <h3 className="font-bold">{obj.name}</h3>
+                            {obj.verified && (
+                              <Icon name="BadgeCheck" size={16} className="text-primary" />
+                            )}
+                          </div>
+                          <p className="text-sm text-muted-foreground mb-2">{obj.category}</p>
+                          
+                          <div className="flex items-center gap-3 text-sm">
+                            <div className="flex items-center gap-1">
+                              <Icon name="Star" size={14} className="text-yellow-500" />
+                              <span className="font-medium">{obj.rating}</span>
+                              <span className="text-muted-foreground">({obj.reviews})</span>
+                            </div>
+                            <div className="flex items-center gap-1 text-muted-foreground">
+                              <Icon name="Navigation" size={14} />
+                              <span>{obj.distance}</span>
+                            </div>
+                            {obj.audioAvailable && (
+                              <Badge variant="outline" className="border-primary text-primary text-xs">
+                                <Icon name="Headphones" size={10} className="mr-1" />
+                                Аудио
+                              </Badge>
+                            )}
+                          </div>
+                        </div>
+                        
+                        <Button variant="ghost" size="icon" className="h-9 w-9">
+                          <Icon name="Heart" size={18} />
+                        </Button>
+                      </div>
+                    </CardContent>
+                  </Card>
+                ))}
+              </div>
+            </div>
+          )}
+        </div>
+      </div>
+    );
+  };
+
   return (
     <>
       {activeView === 'home' && renderHome()}
@@ -1476,6 +1700,7 @@ const Index = () => {
       {activeView === 'object' && renderObject()}
       {activeView === 'lost' && renderLost()}
       {activeView === 'profile' && renderProfile()}
+      {activeView === 'search' && renderSearch()}
     </>
   );
 };
