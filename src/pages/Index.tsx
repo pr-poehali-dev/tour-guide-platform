@@ -5,10 +5,10 @@ import { Card, CardContent } from '@/components/ui/card';
 import { Badge } from '@/components/ui/badge';
 import { Tabs, TabsContent, TabsList, TabsTrigger } from '@/components/ui/tabs';
 import Icon from '@/components/ui/icon';
-import { routes as routesData } from '@/data/appData';
+import { routes as routesData, menuItems } from '@/data/appData';
 
 const Index = () => {
-  const [activeView, setActiveView] = useState<'home' | 'map' | 'object' | 'lost' | 'profile' | 'search' | 'events' | 'event' | 'quests' | 'news' | 'sos' | 'faq' | 'documents' | 'routes' | 'route' | 'favorites'>('home');
+  const [activeView, setActiveView] = useState<'home' | 'map' | 'object' | 'lost' | 'profile' | 'search' | 'events' | 'event' | 'quests' | 'news' | 'sos' | 'faq' | 'documents' | 'routes' | 'route' | 'favorites' | 'category'>('home');
   const [selectedObject, setSelectedObject] = useState<any>(null);
   const [audioPlaying, setAudioPlaying] = useState(false);
   const [searchQuery, setSearchQuery] = useState('');
@@ -36,6 +36,8 @@ const Index = () => {
     entertainment: true,
     lost: true
   });
+  const [selectedCategory, setSelectedCategory] = useState<string>('');
+  const [routeSearchQuery, setRouteSearchQuery] = useState('');
 
   const regions = {
     'ДНР': ['Донецк', 'Макеевка', 'Мариуполь', 'Шахтёрск', 'Снежное', 'Харцызск', 'Енакиево', 'Дебальцево', 'Мангуш', 'Новоазовск', 'Старобешево', 'Волноваха', 'Горловка', 'Амвросиевка', 'Тельманово', 'Зугрэс', 'Мелекино', 'Ялта', 'Урзуф', 'Володарское', 'Ясиноватая', 'Торез', 'Иловайск'],
@@ -558,8 +560,8 @@ const Index = () => {
               key={cat.id} 
               className="flex flex-col items-center gap-2 p-3 rounded-xl hover:bg-gray-100 transition-colors"
               onClick={() => {
-                setSelectedFilters([cat.name]);
-                setActiveView('map');
+                setSelectedCategory(cat.name);
+                setActiveView('category');
               }}
             >
               <div className={`w-14 h-14 bg-gradient-to-br ${cat.gradient} rounded-2xl flex items-center justify-center text-white shadow-lg`}>
@@ -2742,9 +2744,16 @@ const Index = () => {
 
   const renderRoutes = () => {
     const routeCategories = ['Все', 'Культура', 'Романтика', 'Литература', 'Еда', 'Природа', 'Вечерний'];
-    const filteredRoutes = routeFilters.length === 0 || routeFilters.includes('Все')
+    let filteredRoutes = routeFilters.length === 0 || routeFilters.includes('Все')
       ? routes
       : routes.filter(route => routeFilters.includes(route.category));
+    
+    if (routeSearchQuery.trim()) {
+      filteredRoutes = filteredRoutes.filter(route =>
+        route.title.toLowerCase().includes(routeSearchQuery.toLowerCase()) ||
+        route.description.toLowerCase().includes(routeSearchQuery.toLowerCase())
+      );
+    }
 
     return (
       <div className="min-h-screen bg-gradient-to-br from-gray-50 via-white to-red-50 pb-24">
@@ -2768,8 +2777,20 @@ const Index = () => {
               <Icon name="Search" className="absolute left-3 top-1/2 -translate-y-1/2 text-muted-foreground" size={20} />
               <Input 
                 placeholder="Поиск маршрутов..." 
-                className="pl-10 pr-4 h-12 rounded-full border-2 border-gray-200 focus:border-primary"
+                className="pl-10 pr-10 h-12 rounded-full border-2 border-gray-200 focus:border-primary"
+                value={routeSearchQuery}
+                onChange={(e) => setRouteSearchQuery(e.target.value)}
               />
+              {routeSearchQuery && (
+                <Button 
+                  variant="ghost" 
+                  size="icon"
+                  className="absolute right-1 top-1/2 -translate-y-1/2 h-8 w-8"
+                  onClick={() => setRouteSearchQuery('')}
+                >
+                  <Icon name="X" size={16} />
+                </Button>
+              )}
             </div>
           </div>
         </div>
@@ -3189,8 +3210,175 @@ const Index = () => {
     );
   };
 
+  const renderCategory = () => {
+    const categoryMap: Record<string, string> = {
+      'Музеи': 'Музей',
+      'Парки': 'Парк',
+      'Рестораны': 'Ресторан',
+      'Развлечения': 'Развлечение'
+    };
+    const singularCategory = categoryMap[selectedCategory] || selectedCategory;
+    const categoryObjects = objects.filter(obj => obj.category === singularCategory);
+
+    return (
+      <div className="min-h-screen bg-gradient-to-br from-gray-50 via-white to-red-50 pb-24">
+        <div className="sticky top-0 z-50 bg-white/95 backdrop-blur-lg border-b border-gray-200">
+          <div className="max-w-7xl mx-auto px-4 py-4">
+            <div className="flex items-center gap-3">
+              <Button variant="ghost" size="icon" onClick={() => setActiveView('home')}>
+                <Icon name="ArrowLeft" size={24} />
+              </Button>
+              <h1 className="text-2xl font-bold flex-1">{selectedCategory}</h1>
+              <Button 
+                variant="outline" 
+                size="sm"
+                onClick={() => {
+                  setSelectedFilters([selectedCategory]);
+                  setActiveView('map');
+                }}
+              >
+                <Icon name="Map" size={18} className="mr-2" />
+                На карте
+              </Button>
+            </div>
+          </div>
+        </div>
+
+        <div className="max-w-7xl mx-auto px-4 py-6 space-y-6">
+          <div className="flex items-center gap-3 p-4 bg-white rounded-xl border border-gray-200">
+            <div className="text-3xl">
+              {selectedCategory === 'Музеи' && '🏛️'}
+              {selectedCategory === 'Парки' && '🌳'}
+              {selectedCategory === 'Рестораны' && '🍽️'}
+              {selectedCategory === 'Развлечения' && '🎭'}
+            </div>
+            <div className="flex-1">
+              <h2 className="font-bold text-lg">{selectedCategory} в {selectedCity}</h2>
+              <p className="text-sm text-muted-foreground">Найдено мест: {categoryObjects.length}</p>
+            </div>
+          </div>
+
+          <div className="grid gap-4">
+            {categoryObjects.map((obj) => (
+              <Card 
+                key={obj.id}
+                className="overflow-hidden cursor-pointer hover:shadow-lg transition-shadow"
+                onClick={() => {
+                  setSelectedObject(obj);
+                  setActiveView('object');
+                }}
+              >
+                <CardContent className="p-4">
+                  <div className="flex items-start gap-4">
+                    <div className="text-5xl">{obj.image}</div>
+                    
+                    <div className="flex-1 min-w-0">
+                      <div className="flex items-center gap-2 mb-1">
+                        <h3 className="font-bold line-clamp-1">{obj.name}</h3>
+                        {obj.verified && (
+                          <Icon name="BadgeCheck" size={16} className="text-primary" />
+                        )}
+                      </div>
+                      <p className="text-sm text-muted-foreground mb-2 line-clamp-2">{obj.description}</p>
+                      
+                      <div className="flex items-center gap-3 text-sm">
+                        <div className="flex items-center gap-1">
+                          <Icon name="Star" size={14} className="text-yellow-500" />
+                          <span className="font-medium">{obj.rating}</span>
+                          <span className="text-muted-foreground">({obj.reviews})</span>
+                        </div>
+                        <div className="flex items-center gap-1 text-muted-foreground">
+                          <Icon name="Navigation" size={14} />
+                          <span>{obj.distance}</span>
+                        </div>
+                        {obj.audioAvailable && (
+                          <Badge variant="outline" className="border-primary text-primary text-xs">
+                            <Icon name="Headphones" size={10} className="mr-1" />
+                            Аудио
+                          </Badge>
+                        )}
+                      </div>
+                    </div>
+                    
+                    <Button variant="ghost" size="icon" className="h-9 w-9">
+                      <Icon name="Heart" size={18} />
+                    </Button>
+                  </div>
+                </CardContent>
+              </Card>
+            ))}
+          </div>
+        </div>
+      </div>
+    );
+  };
+
   return (
     <>
+      <div className="fixed bottom-0 left-0 right-0 z-50 bg-white border-t border-gray-200 pb-safe">
+        <div className="max-w-7xl mx-auto px-2 py-2">
+          <div className="flex items-center justify-around">
+            <button
+              className={`flex flex-col items-center gap-1 p-2 rounded-lg transition-colors ${
+                activeView === 'home' ? 'text-primary' : 'text-muted-foreground'
+              }`}
+              onClick={() => setActiveView('home')}
+            >
+              <Icon name="Home" size={24} />
+              <span className="text-xs font-medium">Главная</span>
+            </button>
+            
+            <button
+              className={`flex flex-col items-center gap-1 p-2 rounded-lg transition-colors ${
+                activeView === 'map' ? 'text-primary' : 'text-muted-foreground'
+              }`}
+              onClick={() => setActiveView('map')}
+            >
+              <Icon name="Map" size={24} />
+              <span className="text-xs font-medium">Карта</span>
+            </button>
+            
+            <button
+              className={`flex flex-col items-center gap-1 p-2 rounded-lg transition-colors ${
+                activeView === 'routes' ? 'text-primary' : 'text-muted-foreground'
+              }`}
+              onClick={() => setActiveView('routes')}
+            >
+              <Icon name="Route" size={24} />
+              <span className="text-xs font-medium">Маршруты</span>
+            </button>
+            
+            <button
+              className={`flex flex-col items-center gap-1 p-2 rounded-lg transition-colors ${
+                activeView === 'favorites' ? 'text-primary' : 'text-muted-foreground'
+              }`}
+              onClick={() => setActiveView('favorites')}
+            >
+              <Icon name="Heart" size={24} />
+              <span className="text-xs font-medium">Избранное</span>
+            </button>
+            
+            <button
+              className="flex flex-col items-center gap-1 p-2 rounded-lg transition-colors text-muted-foreground"
+              onClick={() => setMenuOpen(true)}
+            >
+              <Icon name="Menu" size={24} />
+              <span className="text-xs font-medium">Меню</span>
+            </button>
+            
+            <button
+              className={`flex flex-col items-center gap-1 p-2 rounded-lg transition-colors ${
+                activeView === 'profile' ? 'text-primary' : 'text-muted-foreground'
+              }`}
+              onClick={() => setActiveView('profile')}
+            >
+              <Icon name="User" size={24} />
+              <span className="text-xs font-medium">Профиль</span>
+            </button>
+          </div>
+        </div>
+      </div>
+
       {locationModalOpen && (
         <div 
           className="fixed inset-0 bg-black/50 z-[70] backdrop-blur-sm flex items-center justify-center p-4"
@@ -3350,6 +3538,7 @@ const Index = () => {
       {activeView === 'routes' && renderRoutes()}
       {activeView === 'route' && renderRoute()}
       {activeView === 'favorites' && renderFavorites()}
+      {activeView === 'category' && renderCategory()}
     </>
   );
 };
