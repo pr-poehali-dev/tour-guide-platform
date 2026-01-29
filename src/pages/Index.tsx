@@ -1011,7 +1011,7 @@ const Index = () => {
             >
               <Icon name="ArrowLeft" size={24} />
             </Button>
-            <h2 className="font-bold text-lg">Карта</h2>
+            <h2 className="font-bold text-lg">Карта Донецка</h2>
             <Button variant="ghost" size="icon">
               <Icon name="Filter" size={24} />
             </Button>
@@ -1020,24 +1020,15 @@ const Index = () => {
       </div>
 
       <div className="relative h-[calc(100vh-140px)]">
-        <div className="absolute inset-0 bg-gradient-to-br from-gray-100 via-white to-red-50 flex items-center justify-center">
-          <div className="text-center space-y-4">
-            <div className="w-32 h-32 mx-auto rounded-full bg-white/50 backdrop-blur-sm flex items-center justify-center animate-pulse-glow">
-              <Icon name="MapPin" size={48} className="text-primary" />
-            </div>
-            <div className="space-y-2">
-              <h3 className="text-xl font-bold">Интерактивная карта</h3>
-              <p className="text-muted-foreground">
-                Здесь будет карта с достопримечательностями<br />
-                и цветовыми зонами безопасности
-              </p>
-            </div>
-          </div>
-        </div>
+        <img 
+          src="https://cdn.poehali.dev/projects/786dd0b8-782a-4dcd-b737-2f176ce8049c/bucket/f59cec38-2f76-44dd-807f-4b150a124f99.jpg" 
+          alt="Карта Донецка"
+          className="absolute inset-0 w-full h-full object-cover"
+        />
 
         <div className="absolute top-4 left-4 right-4 z-10">
           <Input 
-            placeholder="Поиск на карте..." 
+            placeholder="Поиск адреса на карте..." 
             className="bg-white shadow-lg border-0"
           />
         </div>
