@@ -1011,7 +1011,7 @@ const Index = () => {
             >
               <Icon name="ArrowLeft" size={24} />
             </Button>
-            <h2 className="font-bold text-lg">Карта Донецка</h2>
+            <h2 className="font-bold text-lg">Карта</h2>
             <Button variant="ghost" size="icon">
               <Icon name="Filter" size={24} />
             </Button>
