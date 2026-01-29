@@ -12,7 +12,7 @@ const Index = () => {
   const [selectedObject, setSelectedObject] = useState<any>(null);
   const [audioPlaying, setAudioPlaying] = useState(false);
   const [searchQuery, setSearchQuery] = useState('');
-  const [searchHistory, setSearchHistory] = useState<string[]>(['Эрмитаж', 'Летний сад', 'Рестораны у Невского']);
+  const [searchHistory, setSearchHistory] = useState<string[]>(['Художественный музей', 'Парк Фор жа', 'Рестораны на Артёма']);
   const [selectedFilters, setSelectedFilters] = useState<string[]>([]);
   const [selectedEvent, setSelectedEvent] = useState<any>(null);
   const [eventsLoading, setEventsLoading] = useState(false);
@@ -813,9 +813,9 @@ const Index = () => {
           </div>
           <div className="flex gap-4 overflow-x-auto pb-2 scrollbar-hide">
             {[
-              { name: 'Петергоф', emoji: '⛲', type: 'Дворец', rating: 4.9 },
-              { name: 'Мариинский театр', emoji: '🎭', type: 'Театр', rating: 4.8 },
-              { name: 'Невский проспект', emoji: '🏙️', type: 'Улица', rating: 4.7 }
+              { name: 'Оперный театр', emoji: '🎭', type: 'Театр', rating: 4.9 },
+              { name: 'Бульвар Пушкина', emoji: '🏙️', type: 'Улица', rating: 4.8 },
+              { name: 'Пальма Мерцалова', emoji: '🌴', type: 'Памятник', rating: 4.7 }
             ].map((place, i) => (
               <Card key={i} className="min-w-[240px] overflow-hidden cursor-pointer hover:shadow-lg transition-shadow">
                 <CardContent className="p-4">
@@ -2010,19 +2010,19 @@ const Index = () => {
 
   const renderSearch = () => {
     const suggestions = [
-      { text: 'Эрмитаж', type: 'Музей', icon: '🏛️' },
-      { text: 'Летний сад', type: 'Парк', icon: '🌳' },
-      { text: 'Петергоф', type: 'Дворец', icon: '⛲' },
-      { text: 'Мариинский театр', type: 'Театр', icon: '🎭' },
-      { text: 'Исаакиевский собор', type: 'Храм', icon: '⛪' },
-      { text: 'Невский проспект', type: 'Улица', icon: '🏙️' }
+      { text: 'Художественный музей', type: 'Музей', icon: '🏛️' },
+      { text: 'Парк Форжа', type: 'Парк', icon: '🌳' },
+      { text: 'Оперный театр', type: 'Театр', icon: '🎭' },
+      { text: 'Спасо-Преображенский собор', type: 'Храм', icon: '⛪' },
+      { text: 'Бульвар Пушкина', type: 'Улица', icon: '🏙️' },
+      { text: 'Пальма Мерцалова', type: 'Памятник', icon: '🌴' }
     ];
 
     const allObjects = [
       ...objects,
-      { id: 4, name: 'Петергоф', category: 'Дворец', rating: 4.9, reviews: 3421, distance: '12.3 км', image: '⛲', verified: true, audioAvailable: true },
-      { id: 5, name: 'Исаакиевский собор', category: 'Храм', rating: 4.8, reviews: 2156, distance: '2.1 км', image: '⛪', verified: true, audioAvailable: true },
-      { id: 6, name: 'Невский проспект', category: 'Улица', rating: 4.7, reviews: 1876, distance: '0.5 км', image: '🏙️', verified: true, audioAvailable: false }
+      { id: 4, name: 'Оперный театр', category: 'Театр', rating: 4.9, reviews: 3421, distance: '1.5 км', image: '🎭', verified: true, audioAvailable: true },
+      { id: 5, name: 'Спасо-Преображенский собор', category: 'Храм', rating: 4.8, reviews: 2156, distance: '2.1 км', image: '⛪', verified: true, audioAvailable: true },
+      { id: 6, name: 'Бульвар Пушкина', category: 'Улица', rating: 4.7, reviews: 1876, distance: '0.5 км', image: '🏙️', verified: true, audioAvailable: false }
     ];
 
     const filters = ['Музеи', 'Парки', 'Рестораны', 'Развлечения', 'С аудиогидом', 'Рядом со мной'];
