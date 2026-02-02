@@ -9,6 +9,7 @@ import { Switch } from '@/components/ui/switch';
 import { Badge } from '@/components/ui/badge';
 import Icon from '@/components/ui/icon';
 import { useToast } from '@/hooks/use-toast';
+import ImageUpload from '@/components/ImageUpload';
 
 const API_URL = 'https://functions.poehali.dev/e3de93ec-33d7-4553-980a-8a21e96026d0';
 
@@ -212,7 +213,7 @@ const EditForm = ({ item, resource, onSave, onCancel }: any) => {
         { name: 'subtitle', label: 'Подзаголовок', type: 'textarea' },
         { name: 'button_text', label: 'Текст кнопки', type: 'text' },
         { name: 'button_link', label: 'Ссылка кнопки', type: 'text' },
-        { name: 'image_url', label: 'URL изображения', type: 'text' },
+        { name: 'image_url', label: 'URL изображения', type: 'image', folder: 'banners' },
         { name: 'position', label: 'Позиция', type: 'number' },
         { name: 'is_active', label: 'Активен', type: 'switch' }
       ],
@@ -221,7 +222,7 @@ const EditForm = ({ item, resource, onSave, onCancel }: any) => {
         { name: 'category', label: 'Категория', type: 'text' },
         { name: 'description', label: 'Описание', type: 'textarea' },
         { name: 'emoji', label: 'Эмодзи', type: 'text' },
-        { name: 'image', label: 'Изображение', type: 'text' },
+        { name: 'image', label: 'Изображение', type: 'image', folder: 'objects' },
         { name: 'rating', label: 'Рейтинг', type: 'number', step: '0.1' },
         { name: 'reviews', label: 'Отзывов', type: 'number' },
         { name: 'distance', label: 'Расстояние', type: 'text' },
@@ -269,7 +270,7 @@ const EditForm = ({ item, resource, onSave, onCancel }: any) => {
         { name: 'excerpt', label: 'Краткое описание', type: 'textarea' },
         { name: 'content', label: 'Содержание', type: 'textarea' },
         { name: 'category', label: 'Категория', type: 'text' },
-        { name: 'image_url', label: 'URL изображения', type: 'text' },
+        { name: 'image_url', label: 'URL изображения', type: 'image', folder: 'news' },
         { name: 'published_date', label: 'Дата публикации', type: 'date' },
         { name: 'is_active', label: 'Активна', type: 'switch' }
       ],
@@ -306,32 +307,43 @@ const EditForm = ({ item, resource, onSave, onCancel }: any) => {
 
     return (fields[resource] || []).map(field => (
       <div key={field.name} className="space-y-2">
-        <Label htmlFor={field.name}>
-          {field.label}
-          {field.required && <span className="text-red-500 ml-1">*</span>}
-        </Label>
-        {field.type === 'textarea' ? (
-          <Textarea
-            id={field.name}
+        {field.type === 'image' ? (
+          <ImageUpload
             value={formData[field.name] || ''}
-            onChange={(e) => handleChange(field.name, e.target.value)}
-            rows={4}
-          />
-        ) : field.type === 'switch' ? (
-          <Switch
-            checked={formData[field.name] || false}
-            onCheckedChange={(checked) => handleChange(field.name, checked)}
+            onChange={(url) => handleChange(field.name, url)}
+            folder={field.folder || 'images'}
+            label={field.label}
           />
         ) : (
-          <Input
-            id={field.name}
-            type={field.type || 'text'}
-            value={formData[field.name] || ''}
-            onChange={(e) => handleChange(field.name, field.type === 'number' ? parseFloat(e.target.value) : e.target.value)}
-            step={field.step}
-            min={field.min}
-            max={field.max}
-          />
+          <>
+            <Label htmlFor={field.name}>
+              {field.label}
+              {field.required && <span className="text-red-500 ml-1">*</span>}
+            </Label>
+            {field.type === 'textarea' ? (
+              <Textarea
+                id={field.name}
+                value={formData[field.name] || ''}
+                onChange={(e) => handleChange(field.name, e.target.value)}
+                rows={4}
+              />
+            ) : field.type === 'switch' ? (
+              <Switch
+                checked={formData[field.name] || false}
+                onCheckedChange={(checked) => handleChange(field.name, checked)}
+              />
+            ) : (
+              <Input
+                id={field.name}
+                type={field.type || 'text'}
+                value={formData[field.name] || ''}
+                onChange={(e) => handleChange(field.name, field.type === 'number' ? parseFloat(e.target.value) : e.target.value)}
+                step={field.step}
+                min={field.min}
+                max={field.max}
+              />
+            )}
+          </>
         )}
       </div>
     ));
