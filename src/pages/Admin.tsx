@@ -1,4 +1,5 @@
 import { useState, useEffect } from 'react';
+import { useNavigate } from 'react-router-dom';
 import { Card, CardContent, CardHeader, CardTitle } from '@/components/ui/card';
 import { Tabs, TabsContent, TabsList, TabsTrigger } from '@/components/ui/tabs';
 import { Button } from '@/components/ui/button';
@@ -11,14 +12,62 @@ import Icon from '@/components/ui/icon';
 import { useToast } from '@/hooks/use-toast';
 import ImageUpload from '@/components/ImageUpload';
 
-const API_URL = 'https://functions.poehali.dev/e3de93ec-33d7-4553-980a-8a21e96026d0';
+const API_URL = 'https://functions.poehali.dev/2b8dd058-45da-4658-a7aa-8e77eb3b1d2e';
+const AUTH_URL = 'https://functions.poehali.dev/57106f04-c97d-4656-b384-0b9befd29e45';
 
 const Admin = () => {
+  const navigate = useNavigate();
   const [activeTab, setActiveTab] = useState('banners');
   const [data, setData] = useState<any[]>([]);
   const [loading, setLoading] = useState(false);
   const [editingItem, setEditingItem] = useState<any>(null);
+  const [authenticated, setAuthenticated] = useState(false);
   const { toast } = useToast();
+
+  useEffect(() => {
+    checkAuth();
+  }, []);
+
+  const checkAuth = async () => {
+    const token = localStorage.getItem('admin_token');
+    if (!token) {
+      navigate('/login');
+      return;
+    }
+
+    try {
+      const response = await fetch(`${AUTH_URL}?action=verify`, {
+        method: 'POST',
+        headers: { 'Content-Type': 'application/json' },
+        body: JSON.stringify({ token }),
+      });
+
+      const data = await response.json();
+      if (response.ok && data.valid) {
+        setAuthenticated(true);
+      } else {
+        localStorage.removeItem('admin_token');
+        localStorage.removeItem('admin_user');
+        navigate('/login');
+      }
+    } catch (error) {
+      navigate('/login');
+    }
+  };
+
+  const handleLogout = async () => {
+    const token = localStorage.getItem('admin_token');
+    if (token) {
+      await fetch(`${AUTH_URL}?action=logout`, {
+        method: 'POST',
+        headers: { 'Content-Type': 'application/json' },
+        body: JSON.stringify({ token }),
+      });
+    }
+    localStorage.removeItem('admin_token');
+    localStorage.removeItem('admin_user');
+    navigate('/login');
+  };
 
   useEffect(() => {
     loadData(activeTab);
@@ -90,6 +139,14 @@ const Admin = () => {
     }
   };
 
+  const handleEdit = (item: any) => {
+    setEditingItem(item);
+  };
+
+  if (!authenticated) {
+    return <div className="min-h-screen flex items-center justify-center">Загрузка...</div>;
+  }
+
   return (
     <div className="min-h-screen bg-[#F8F8F8] p-4 md:p-8">
       <div className="max-w-7xl mx-auto">
@@ -98,10 +155,19 @@ const Admin = () => {
             <h1 className="text-3xl font-bold text-[#171B1F]">Админ-панель</h1>
             <p className="text-[#8B9199] mt-1">Управление контентом сайта</p>
           </div>
-          <Button onClick={() => window.location.href = '/'} variant="outline">
-            <Icon name="Home" className="mr-2" size={16} />
-            На главную
-          </Button>
+          <div className="flex gap-2 items-center">
+            <span className="text-sm text-[#8B9199]">
+              {JSON.parse(localStorage.getItem('admin_user') || '{}').username}
+            </span>
+            <Button onClick={handleLogout} variant="outline" size="sm">
+              <Icon name="LogOut" className="mr-2" size={16} />
+              Выйти
+            </Button>
+            <Button onClick={() => window.location.href = '/'} variant="outline" size="sm">
+              <Icon name="Home" className="mr-2" size={16} />
+              На главную
+            </Button>
+          </div>
         </div>
 
         <Tabs value={activeTab} onValueChange={setActiveTab} className="w-full">
@@ -347,17 +413,6 @@ const EditForm = ({ item, resource, onSave, onCancel }: any) => {
         )}
       </div>
     ));
-  };
-
-  return (
-    <div className="space-y-6">
-      <div className="grid grid-cols-1 md:grid-cols-2 gap-4">
-        {renderFields()}
-      </div>
-      <div className="flex gap-3 pt-4 border-t">
-        <Button onClick={() => onSave(formData)}>
-          <Icon name="Save" className="mr-2" size={16} />
-          Сохранить
         </Button>
         <Button variant="outline" onClick={onCancel}>
           Отмена

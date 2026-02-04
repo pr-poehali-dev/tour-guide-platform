@@ -1,0 +1,18 @@
+{
+  "tests": [
+    {
+      "name": "Get all objects",
+      "method": "GET",
+      "path": "/?resource=objects",
+      "expectedStatus": 200,
+      "bodyMatcher": "partial"
+    },
+    {
+      "name": "Get all routes",
+      "method": "GET",
+      "path": "/?resource=routes",
+      "expectedStatus": 200,
+      "bodyMatcher": "partial"
+    }
+  ]
+}
